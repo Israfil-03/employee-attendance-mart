@@ -3,9 +3,17 @@
  * Initializes database and starts the Express server
  */
 const app = require('./app');
-const { PORT, NODE_ENV } = require('./config/env');
+const {
+  PORT,
+  NODE_ENV,
+  DEFAULT_ADMIN_NAME,
+  DEFAULT_ADMIN_MOBILE,
+  DEFAULT_ADMIN_EMPLOYEE_ID,
+  DEFAULT_ADMIN_PASSWORD
+} = require('./config/env');
 const userModel = require('./models/userModel');
 const attendanceModel = require('./models/attendanceModel');
+const { hashPassword } = require('./utils/password');
 
 /**
  * Initialize database tables
@@ -20,12 +28,50 @@ const initializeDatabase = async () => {
     
     await attendanceModel.createTable();
     console.log('✓ Attendance records table ready');
+
+    await ensureDefaultAdmin();
     
     console.log('Database initialization complete');
   } catch (error) {
     console.error('Database initialization failed:', error);
     throw error;
   }
+};
+
+/**
+ * Ensure there is at least one admin user present
+ * Uses bootstrap credentials from environment variables
+ */
+const ensureDefaultAdmin = async () => {
+  // Skip creation if required secrets are missing
+  if (!DEFAULT_ADMIN_MOBILE || !DEFAULT_ADMIN_PASSWORD) {
+    console.warn('Skipping default admin bootstrap: missing DEFAULT_ADMIN_MOBILE or DEFAULT_ADMIN_PASSWORD');
+    return;
+  }
+
+  const existingAdmin = await userModel.findByMobileNumber(DEFAULT_ADMIN_MOBILE);
+
+  if (existingAdmin) {
+    console.log('✓ Default admin already exists');
+    return;
+  }
+
+  const passwordHash = await hashPassword(DEFAULT_ADMIN_PASSWORD);
+
+  await userModel.create({
+    name: DEFAULT_ADMIN_NAME,
+    mobileNumber: DEFAULT_ADMIN_MOBILE,
+    employeeId: DEFAULT_ADMIN_EMPLOYEE_ID || null,
+    passwordHash,
+    role: 'admin'
+  });
+
+  console.log('✓ Default admin created');
+  console.log(`  Mobile: ${DEFAULT_ADMIN_MOBILE}`);
+  if (DEFAULT_ADMIN_EMPLOYEE_ID) {
+    console.log(`  Employee ID: ${DEFAULT_ADMIN_EMPLOYEE_ID}`);
+  }
+  console.log('  ⚠️  Update DEFAULT_ADMIN_PASSWORD after first login');
 };
 
 /**

@@ -8,6 +8,12 @@ require('dotenv').config();
 const userModel = require('../models/userModel');
 const attendanceModel = require('../models/attendanceModel');
 const { hashPassword } = require('../utils/password');
+const {
+  DEFAULT_ADMIN_NAME,
+  DEFAULT_ADMIN_MOBILE,
+  DEFAULT_ADMIN_EMPLOYEE_ID,
+  DEFAULT_ADMIN_PASSWORD
+} = require('../config/env');
 
 const initializeDatabase = async () => {
   try {
@@ -23,26 +29,31 @@ const initializeDatabase = async () => {
     console.log('✓ Attendance records table created\n');
     
     // Check if admin exists
-    const existingAdmin = await userModel.findByMobileNumber('9999999999');
+    const existingAdmin = await userModel.findByMobileNumber(DEFAULT_ADMIN_MOBILE);
     
     if (!existingAdmin) {
       console.log('Creating default admin user...');
       
-      const passwordHash = await hashPassword('admin123');
+      if (!DEFAULT_ADMIN_PASSWORD) {
+        throw new Error('DEFAULT_ADMIN_PASSWORD is required to create the default admin');
+      }
+
+      const passwordHash = await hashPassword(DEFAULT_ADMIN_PASSWORD);
       
       const admin = await userModel.create({
-        name: 'System Admin',
-        mobileNumber: '9999999999',
-        employeeId: 'ADMIN001',
+        name: DEFAULT_ADMIN_NAME,
+        mobileNumber: DEFAULT_ADMIN_MOBILE,
+        employeeId: DEFAULT_ADMIN_EMPLOYEE_ID || null,
         passwordHash,
         role: 'admin'
       });
       
       console.log('✓ Default admin created:');
-      console.log('  Mobile: 9999999999');
-      console.log('  Employee ID: ADMIN001');
-      console.log('  Password: admin123');
-      console.log('  ⚠️  Please change the password after first login!\n');
+      console.log(`  Mobile: ${admin.mobile_number}`);
+      if (admin.employee_id) {
+        console.log(`  Employee ID: ${admin.employee_id}`);
+      }
+      console.log('  ⚠️  Update DEFAULT_ADMIN_PASSWORD after first login!\n');
     } else {
       console.log('Admin user already exists\n');
     }

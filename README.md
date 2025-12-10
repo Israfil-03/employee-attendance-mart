@@ -44,7 +44,7 @@ employee-attendance-mart/
 │   │   ├── models/           # Database models
 │   │   ├── routes/           # API routes
 │   │   ├── utils/            # Helper functions
-│   │   ├── scripts/          # DB initialization script
+│   │   ├── scripts/          # DB initialization scripts
 │   │   ├── app.js            # Express app setup
 │   │   └── server.js         # Server entry point
 │   └── package.json
@@ -61,78 +61,147 @@ employee-attendance-mart/
 │   ├── index.html
 │   └── package.json
 │
+├── render.yaml               # Render deployment configuration
+├── package.json              # Root package.json for monorepo
 └── README.md
 ```
 
-## Getting Started
+## Quick Start (Local Development)
 
 ### Prerequisites
 - Node.js 18+
-- PostgreSQL database (local or Render)
+- PostgreSQL database (local or cloud)
 - npm or yarn
 
-### Backend Setup
+### 1. Clone and Install
 
-1. Navigate to server directory:
-   ```bash
-   cd server
-   ```
+```bash
+# Clone the repository
+git clone <your-repo-url>
+cd employee-attendance-mart
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+# Install all dependencies (root, client, server)
+npm run install:all
+```
 
-3. Create `.env` file (copy from `.env.example`):
-   ```env
-   DATABASE_URL=postgresql://user:password@localhost:5432/attendance_db
-   JWT_SECRET=your-super-secret-jwt-key
-   PORT=5000
-   FRONTEND_URL=http://localhost:5173
-   ```
+### 2. Configure Environment Variables
 
-4. Initialize database (creates tables and default admin):
-   ```bash
-   npm run db:init
-   ```
-   
-   Default admin credentials:
-   - Mobile: `9999999999`
-   - Employee ID: `ADMIN001`
-   - Password: `admin123`
+**Server (.env)**
+```bash
+cd server
+cp .env.example .env
+# Edit .env with your database credentials
+```
 
-5. Start the server:
-   ```bash
-   npm run dev    # Development with nodemon
-   npm start      # Production
-   ```
+```env
+DATABASE_URL=postgresql://user:password@localhost:5432/attendance_db
+JWT_SECRET=your-super-secret-jwt-key-at-least-32-characters
+PORT=5000
+FRONTEND_URL=http://localhost:5173
+NODE_ENV=development
+```
 
-### Frontend Setup
+**Client (.env)** (Optional for development)
+```bash
+cd client
+cp .env.example .env
+```
 
-1. Navigate to client directory:
-   ```bash
-   cd client
-   ```
+### 3. Initialize Database
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+```bash
+# From the root directory
+npm run db:setup
 
-3. Create `.env` file (for production):
-   ```env
-   VITE_API_URL=http://localhost:5000
-   ```
+# Or from server directory
+cd server
+npm run db:setup
+```
 
-4. Start development server:
-   ```bash
-   npm run dev
-   ```
+This will:
+- Create all required tables
+- Create a default admin user
 
-5. Build for production:
-   ```bash
-   npm run build
-   ```
+**Default Admin Credentials:**
+- Mobile: `9999999999`
+- Employee ID: `ADMIN001`
+- Password: `admin123`
+
+⚠️ **Change these credentials after first login!**
+
+### 4. Start Development Servers
+
+```bash
+# From root (runs both frontend and backend)
+npm run dev
+
+# Or separately:
+npm run dev:server  # Backend on http://localhost:5000
+npm run dev:client  # Frontend on http://localhost:5173
+```
+
+## Deployment on Render
+
+### Option 1: Using Render Blueprint (Recommended)
+
+1. Push your code to GitHub/GitLab
+2. Go to [Render Dashboard](https://dashboard.render.com)
+3. Click **New > Blueprint**
+4. Connect your repository
+5. Render will automatically detect `render.yaml` and create:
+   - PostgreSQL Database
+   - Backend Web Service
+   - Frontend Static Site
+
+6. After deployment, update environment variables:
+   - Set `FRONTEND_URL` in backend to your frontend URL
+   - Set `VITE_API_URL` in frontend to your backend URL
+
+### Option 2: Manual Deployment
+
+#### Step 1: Create PostgreSQL Database
+
+1. Render Dashboard → **New > PostgreSQL**
+2. Name: `attendance-db`
+3. Database: `attendance_db`
+4. User: `attendance_user`
+5. Copy the **Internal Database URL**
+
+#### Step 2: Deploy Backend
+
+1. Render Dashboard → **New > Web Service**
+2. Connect your repository
+3. Configure:
+   - **Name:** `employee-attendance-api`
+   - **Root Directory:** `server`
+   - **Runtime:** Node
+   - **Build Command:** `npm install`
+   - **Start Command:** `npm start`
+4. Add Environment Variables:
+   - `DATABASE_URL` - Internal PostgreSQL URL
+   - `JWT_SECRET` - Generate a strong random string
+   - `FRONTEND_URL` - Your frontend URL (update after frontend deployment)
+   - `NODE_ENV` - `production`
+
+#### Step 3: Deploy Frontend
+
+1. Render Dashboard → **New > Static Site**
+2. Connect your repository
+3. Configure:
+   - **Name:** `employee-attendance-web`
+   - **Root Directory:** `client`
+   - **Build Command:** `npm install && npm run build`
+   - **Publish Directory:** `dist`
+4. Add Environment Variable:
+   - `VITE_API_URL` - Your backend URL (e.g., `https://your-backend.onrender.com`)
+5. Add Rewrite Rule:
+   - Source: `/*`
+   - Destination: `/index.html`
+   - Action: Rewrite
+
+#### Step 4: Update CORS
+
+After both are deployed, update the backend's `FRONTEND_URL` environment variable to your frontend URL.
 
 ## API Endpoints
 
@@ -162,34 +231,9 @@ employee-attendance-mart/
 | GET | `/api/admin/attendance/export/excel` | Export to Excel |
 | GET | `/api/admin/attendance/export/pdf` | Export to PDF |
 
-## Deployment on Render
-
-### PostgreSQL Database
-1. Create a new PostgreSQL database on Render
-2. Copy the Internal Database URL
-
-### Backend (Web Service)
-1. Create new Web Service
-2. Connect your GitHub repository
-3. Set root directory: `server`
-4. Build command: `npm install`
-5. Start command: `npm start`
-6. Add environment variables:
-   - `DATABASE_URL` - Your Render PostgreSQL URL
-   - `JWT_SECRET` - Strong random string
-   - `FRONTEND_URL` - Your frontend URL
-   - `NODE_ENV` - `production`
-
-### Frontend (Static Site)
-1. Create new Static Site
-2. Connect your GitHub repository
-3. Set root directory: `client`
-4. Build command: `npm install && npm run build`
-5. Publish directory: `dist`
-6. Add environment variable:
-   - `VITE_API_URL` - Your backend URL (e.g., `https://your-backend.onrender.com`)
-
 ## Database Schema
+
+The database is automatically created when the server starts. The schema includes:
 
 ### Users Table
 ```sql
@@ -209,7 +253,7 @@ CREATE TABLE users (
 ```sql
 CREATE TABLE attendance_records (
   id SERIAL PRIMARY KEY,
-  user_id INTEGER REFERENCES users(id),
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   check_in_time TIMESTAMP NOT NULL,
   check_in_latitude DOUBLE PRECISION,
   check_in_longitude DOUBLE PRECISION,
@@ -220,7 +264,71 @@ CREATE TABLE attendance_records (
 );
 ```
 
+## Scripts Reference
+
+### Root Directory
+```bash
+npm run install:all   # Install all dependencies
+npm run dev           # Start both servers in development
+npm run dev:server    # Start backend only
+npm run dev:client    # Start frontend only
+npm run build         # Build frontend for production
+npm run db:setup      # Initialize database
+```
+
+### Server Directory
+```bash
+npm start            # Start production server
+npm run dev          # Start development server with nodemon
+npm run db:setup     # Full database setup with verification
+npm run db:init      # Quick database initialization
+```
+
+### Client Directory
+```bash
+npm run dev          # Start development server
+npm run build        # Build for production
+npm run preview      # Preview production build
+```
+
+## Automatic Database Initialization
+
+The server automatically:
+1. **Creates tables** on startup if they don't exist
+2. **Creates default admin** if no admin user exists
+
+This means you don't need to run any separate database scripts for deployment - just start the server!
+
+## Troubleshooting
+
+### Database Connection Issues
+- Verify `DATABASE_URL` format: `postgresql://user:password@host:port/database`
+- For Render: Use the **Internal** Database URL
+- Check if PostgreSQL is running locally
+
+### CORS Errors
+- Ensure `FRONTEND_URL` is set correctly in backend
+- For multiple origins, use comma-separated values
+
+### Authentication Issues
+- Check if `JWT_SECRET` is set
+- Clear browser localStorage and try logging in again
+
+### Build Failures
+- Ensure Node.js version is 18+
+- Delete `node_modules` and reinstall
+
+## Security Recommendations
+
+1. **Change Default Admin Password** immediately after deployment
+2. **Use Strong JWT Secret** - Generate with:
+   ```bash
+   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+   ```
+3. **Enable HTTPS** - Render provides this automatically
+4. **Regular Backups** - Enable automatic backups for your database
+
 ## License
 
-ISC License
+MIT License - see [LICENSE](LICENSE) file
 
