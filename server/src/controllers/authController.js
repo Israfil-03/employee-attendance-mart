@@ -46,8 +46,9 @@ const signup = asyncHandler(async (req, res) => {
   // Hash password
   const passwordHash = await hashPassword(password);
   
-  // Create user (only allow 'employee' role through signup, admin must be created manually)
-  const userRole = role === 'admin' ? 'admin' : 'employee';
+  // Create user (SECURITY: Only allow 'employee' role through public signup)
+  // Admin users must be created through the admin panel or database
+  const userRole = 'employee';
   
   const user = await userModel.create({
     name,
