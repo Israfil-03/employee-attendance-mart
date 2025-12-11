@@ -14,23 +14,6 @@ const getApiUrl = () => {
     return url.endsWith('/') ? url.slice(0, -1) : url;
   }
   
-  // Fallback: If we're on Render, construct the API URL
-  if (typeof window !== 'undefined') {
-    const hostname = window.location.hostname;
-    
-    // If on Render static site, convert to API URL
-    if (hostname.includes('onrender.com')) {
-      // Handle specific naming patterns for this app
-      if (hostname.includes('employee-attendance-mart-1')) {
-        return 'https://employee-attendance-mart.onrender.com';
-      }
-      // Generic pattern: replace -1 suffix with base name (frontend-1 -> frontend for API)
-      if (hostname.match(/-\d+\.onrender\.com$/)) {
-        return `https://${hostname.replace(/-\d+(\.onrender\.com)$/, '$1')}`;
-      }
-    }
-  }
-  
   // Development: use empty string (Vite proxy handles it)
   return '';
 };
