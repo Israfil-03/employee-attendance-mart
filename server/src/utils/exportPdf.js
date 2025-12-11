@@ -16,7 +16,8 @@ const generateAttendancePdf = async (records, filters = {}) => {
       const doc = new PDFDocument({ 
         margin: 50, 
         size: 'A4',
-        layout: 'landscape' // Better for tables
+        layout: 'landscape', // Better for tables
+        bufferPages: true // Enable page buffering for footer pagination
       });
       
       const chunks = [];
@@ -135,14 +136,14 @@ const generateAttendancePdf = async (records, filters = {}) => {
          .font('Helvetica-Bold')
          .text(`Total Records: ${records.length}`, tableLeft);
       
-      // Footer
-      const pageCount = doc.bufferedPageRange().count;
-      for (let i = 0; i < pageCount; i++) {
+      // Footer - add page numbers to all pages
+      const range = doc.bufferedPageRange(); // { start: 0, count: N }
+      for (let i = range.start; i < range.start + range.count; i++) {
         doc.switchToPage(i);
         doc.fontSize(8)
            .font('Helvetica')
            .text(
-             `Page ${i + 1} of ${pageCount} | Employee Attendance System`,
+             `Page ${i + 1} of ${range.count} | Employee Attendance System`,
              50,
              doc.page.height - 30,
              { align: 'center', width: doc.page.width - 100 }
