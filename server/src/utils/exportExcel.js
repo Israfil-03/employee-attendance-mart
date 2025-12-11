@@ -3,15 +3,42 @@
  * Generates Excel files for attendance data using ExcelJS
  */
 const ExcelJS = require('exceljs');
+const { TIMEZONE } = require('../config/env');
 
 /**
- * Format a date for display
+ * Format a date for display with proper timezone
  * @param {Date|string} date 
  * @returns {string} Formatted date string
  */
 const formatDate = (date) => {
   if (!date) return 'N/A';
-  return new Date(date).toLocaleString();
+  return new Date(date).toLocaleDateString('en-IN', { timeZone: TIMEZONE });
+};
+
+/**
+ * Format a time for display with proper timezone
+ * @param {Date|string} date 
+ * @returns {string} Formatted time string
+ */
+const formatTime = (date) => {
+  if (!date) return 'N/A';
+  return new Date(date).toLocaleTimeString('en-IN', { 
+    timeZone: TIMEZONE,
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true
+  });
+};
+
+/**
+ * Format a datetime for display with proper timezone
+ * @param {Date|string} date 
+ * @returns {string} Formatted datetime string
+ */
+const formatDateTime = (date) => {
+  if (!date) return 'N/A';
+  return new Date(date).toLocaleString('en-IN', { timeZone: TIMEZONE });
 };
 
 /**
@@ -35,7 +62,7 @@ const generateAttendanceExcel = async (records, filters = {}) => {
   titleCell.alignment = { horizontal: 'center' };
   
   // Add filter info
-  let filterText = 'Generated: ' + new Date().toLocaleString();
+  let filterText = 'Generated: ' + formatDateTime(new Date());
   if (filters.from || filters.to) {
     filterText += ` | Date Range: ${filters.from || 'Start'} to ${filters.to || 'Now'}`;
   }
@@ -107,11 +134,11 @@ const generateAttendanceExcel = async (records, filters = {}) => {
       sno: index + 1,
       employeeId: record.employee_id || 'N/A',
       name: record.user_name,
-      date: new Date(record.check_in_time).toLocaleDateString(),
-      checkIn: new Date(record.check_in_time).toLocaleTimeString(),
+      date: formatDate(record.check_in_time),
+      checkIn: formatTime(record.check_in_time),
       checkInLocation: checkInLocation,
       checkOut: record.check_out_time 
-        ? new Date(record.check_out_time).toLocaleTimeString() 
+        ? formatTime(record.check_out_time) 
         : 'Not checked out',
       checkOutLocation: checkOutLocation
     });
