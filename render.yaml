@@ -1,7 +1,7 @@
 services:
   - type: web
     name: employee-attendance-api
-    env: node
+    runtime: node
     plan: free
     region: oregon
     branch: main
@@ -29,8 +29,8 @@ services:
       - key: DEFAULT_ADMIN_PASSWORD
         value: "admin123"
 
-  - type: static
-    name: employee-attendance-web
+staticSites:
+  - name: employee-attendance-web
     plan: free
     branch: main
     rootDir: client
