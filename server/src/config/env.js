@@ -25,7 +25,7 @@ module.exports = {
   DEFAULT_ADMIN_NAME: process.env.DEFAULT_ADMIN_NAME || 'Admin',
   DEFAULT_ADMIN_MOBILE: process.env.DEFAULT_ADMIN_MOBILE || '9999999999',
   DEFAULT_ADMIN_EMPLOYEE_ID: process.env.DEFAULT_ADMIN_EMPLOYEE_ID || 'ADMIN001',
-  DEFAULT_ADMIN_PASSWORD: process.env.DEFAULT_ADMIN_PASSWORD || (NODE_ENV === 'development' ? '01234' : ''),
+  DEFAULT_ADMIN_PASSWORD: process.env.DEFAULT_ADMIN_PASSWORD || (NODE_ENV === 'development' ? 'admin123' : ''),
   
   // Node environment
   NODE_ENV
