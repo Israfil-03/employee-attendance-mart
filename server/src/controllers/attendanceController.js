@@ -26,6 +26,16 @@ const checkIn = asyncHandler(async (req, res) => {
   debugLog('📍 Parsed location - lat:', latitude, 'lng:', longitude);
   debugLog('📍 Location types - lat:', typeof latitude, 'lng:', typeof longitude);
   
+  // Validate location is provided
+  if (latitude === null || latitude === undefined || longitude === null || longitude === undefined) {
+    throw new ApiError(400, 'Location is required for check-in. Please enable location access and try again.');
+  }
+  
+  // Validate location values are valid numbers
+  if (typeof latitude !== 'number' || typeof longitude !== 'number' || isNaN(latitude) || isNaN(longitude)) {
+    throw new ApiError(400, 'Invalid location data. Please try again.');
+  }
+  
   // Check if user has already completed attendance today
   const completedToday = await attendanceModel.hasCompletedToday(userId);
   if (completedToday) {
@@ -42,8 +52,8 @@ const checkIn = asyncHandler(async (req, res) => {
   // Create check-in record
   const record = await attendanceModel.checkIn({
     userId,
-    latitude: latitude || null,
-    longitude: longitude || null
+    latitude,
+    longitude
   });
   
   res.status(201).json({
@@ -71,6 +81,16 @@ const checkOut = asyncHandler(async (req, res) => {
   debugLog('📍 Parsed location - lat:', latitude, 'lng:', longitude);
   debugLog('📍 Location types - lat:', typeof latitude, 'lng:', typeof longitude);
   
+  // Validate location is provided
+  if (latitude === null || latitude === undefined || longitude === null || longitude === undefined) {
+    throw new ApiError(400, 'Location is required for check-out. Please enable location access and try again.');
+  }
+  
+  // Validate location values are valid numbers
+  if (typeof latitude !== 'number' || typeof longitude !== 'number' || isNaN(latitude) || isNaN(longitude)) {
+    throw new ApiError(400, 'Invalid location data. Please try again.');
+  }
+  
   // Find open record
   const openRecord = await attendanceModel.findOpenRecord(userId);
   
@@ -80,8 +100,8 @@ const checkOut = asyncHandler(async (req, res) => {
   
   // Update with check-out
   const record = await attendanceModel.checkOut(openRecord.id, {
-    latitude: latitude || null,
-    longitude: longitude || null
+    latitude,
+    longitude
   });
   
   res.json({
