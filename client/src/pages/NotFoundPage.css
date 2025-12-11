@@ -1,5 +1,5 @@
 /**
- * 404 Page Styles
+ * 404 Page Styles - Rose Mart Theme
  */
 
 .not-found-container {
@@ -7,56 +7,147 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #e11d48 0%, #be123c 50%, #9f1239 100%);
   padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.not-found-container::before {
+  content: '';
+  position: absolute;
+  top: -30%;
+  right: -20%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: float 8s ease-in-out infinite;
+}
+
+.not-found-container::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -20%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: float 10s ease-in-out infinite reverse;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-30px) rotate(5deg); }
 }
 
 .not-found-content {
   text-align: center;
   color: white;
+  position: relative;
+  z-index: 1;
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.not-found-content::before {
+  content: '🌹';
+  display: block;
+  font-size: 64px;
+  margin-bottom: 20px;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
 }
 
 .not-found-content h1 {
-  font-size: 120px;
+  font-size: 140px;
   margin: 0;
   line-height: 1;
-  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  font-weight: 800;
+  background: linear-gradient(180deg, #ffffff 0%, #fda4af 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
 }
 
 .not-found-content h2 {
-  font-size: 28px;
-  margin: 16px 0;
-  font-weight: 400;
+  font-size: 32px;
+  margin: 20px 0;
+  font-weight: 500;
+  opacity: 0.95;
 }
 
 .not-found-content p {
-  font-size: 16px;
-  opacity: 0.9;
-  margin-bottom: 30px;
+  font-size: 18px;
+  opacity: 0.85;
+  margin-bottom: 40px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .back-link {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   background: white;
-  color: #667eea;
-  padding: 14px 28px;
-  border-radius: 8px;
+  color: #e11d48;
+  padding: 18px 36px;
+  border-radius: 14px;
   text-decoration: none;
-  font-weight: 600;
-  transition: transform 0.2s, box-shadow 0.2s;
+  font-weight: 700;
+  font-size: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
 }
 
 .back-link:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+  color: #be123c;
 }
 
 @media (max-width: 480px) {
+  .not-found-content::before {
+    font-size: 48px;
+  }
+  
   .not-found-content h1 {
-    font-size: 80px;
+    font-size: 100px;
   }
   
   .not-found-content h2 {
-    font-size: 22px;
+    font-size: 24px;
+  }
+  
+  .not-found-content p {
+    font-size: 16px;
+  }
+  
+  .back-link {
+    padding: 14px 28px;
+    font-size: 14px;
   }
 }

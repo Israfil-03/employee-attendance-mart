@@ -10,9 +10,9 @@ const NotFoundPage = () => {
       <div className="not-found-content">
         <h1>404</h1>
         <h2>Page Not Found</h2>
-        <p>The page you're looking for doesn't exist or has been moved.</p>
+        <p>Oops! The page you're looking for seems to have wandered off from Rose Mart.</p>
         <Link to="/login" className="back-link">
-          ← Back to Login
+          ← Back to Rose Mart
         </Link>
       </div>
     </div>

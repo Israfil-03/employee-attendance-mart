@@ -180,17 +180,35 @@ const EmployeeDashboard = () => {
     return 'Good Evening';
   };
 
+  // Format date as dd/mm/yyyy
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+  // Format time as 12-hour with AM/PM
+  const formatTime = (date) => {
+    return new Date(date).toLocaleTimeString('en-US', { 
+      hour: '2-digit', 
+      minute: '2-digit',
+      hour12: true 
+    });
+  };
+
+  // Get current day name
+  const getDayName = () => {
+    return new Date().toLocaleDateString('en-US', { weekday: 'long' });
+  };
+
   return (
     <div className="dashboard">
       {/* Greeting Section */}
       <div className="dashboard-greeting">
         <h2>{getGreeting()}, {user?.name}! 👋</h2>
-        <p>{new Date().toLocaleDateString('en-US', { 
-          weekday: 'long', 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric' 
-        })}</p>
+        <p>{getDayName()}, {formatDate(new Date())}</p>
       </div>
 
       {/* Messages */}
@@ -217,7 +235,7 @@ const EmployeeDashboard = () => {
         {status.isCheckedIn && status.currentRecord && (
           <div className="checkin-info">
             <p>Checked in at: <strong>
-              {new Date(status.currentRecord.checkInTime).toLocaleTimeString()}
+              {formatTime(status.currentRecord.checkInTime)}
             </strong></p>
           </div>
         )}

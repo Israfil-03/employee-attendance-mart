@@ -50,8 +50,8 @@ const LoginForm = () => {
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-header">
-          <h1>Employee Attendance</h1>
-          <p>Sign in to continue</p>
+          <h1>Rose Mart</h1>
+          <p>Sign in to mark your attendance</p>
         </div>
 
         {error && (

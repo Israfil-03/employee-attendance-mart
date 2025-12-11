@@ -6,16 +6,23 @@ import { useState } from 'react';
 import LocationMap from './LocationMap';
 import './AttendanceTable.css';
 
+// Format date as dd/mm/yyyy
 const formatDate = (dateString) => {
   if (!dateString) return '-';
-  return new Date(dateString).toLocaleDateString();
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
 };
 
+// Format time as 12-hour with AM/PM
 const formatTime = (dateString) => {
   if (!dateString) return '-';
-  return new Date(dateString).toLocaleTimeString([], { 
+  return new Date(dateString).toLocaleTimeString('en-US', { 
     hour: '2-digit', 
-    minute: '2-digit' 
+    minute: '2-digit',
+    hour12: true
   });
 };
 
