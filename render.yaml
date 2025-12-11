@@ -1,9 +1,3 @@
-databases:
-  - name: attendance-db
-    databaseName: attendance_db
-    user: attendance_user
-    plan: free
-
 services:
   - type: web
     name: employee-attendance-api
@@ -17,9 +11,7 @@ services:
     healthCheckPath: /health
     envVars:
       - key: DATABASE_URL
-        fromDatabase:
-          name: attendance-db
-          property: connectionString
+        value: postgresql://israfil_hoque_t2cs_user:hvkekxgD4yDNiexIPcq51wGTK57plvOq@dpg-d4sqjv0gjchc73bk48tg-a/israfil_hoque_t2cs
       - key: JWT_SECRET
         generateValue: true
       - key: FRONTEND_URL
