@@ -4,13 +4,30 @@
  */
 import axios from 'axios';
 
-// Get API URL from environment or default to empty (for development proxy)
-const API_URL = import.meta.env.VITE_API_URL || '';
+// Get API URL from environment
+// IMPORTANT: For production, VITE_API_URL must be set at BUILD time
+const getApiUrl = () => {
+  // Check for Vite environment variable (set at build time)
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  
+  // Fallback: If we're on a .onrender.com domain, construct the API URL
+  if (typeof window !== 'undefined' && window.location.hostname.includes('onrender.com')) {
+    // Replace 'web' with 'api' in the hostname
+    const apiHost = window.location.hostname.replace('-web.onrender.com', '-api.onrender.com');
+    return `https://${apiHost}`;
+  }
+  
+  // Development: use empty string (Vite proxy handles it)
+  return '';
+};
 
-console.log('API URL configured:', API_URL || '(using proxy)');
+const API_URL = getApiUrl();
+
+console.log('API URL configured:', API_URL || '(using local proxy)');
 
 // Create axios instance with base configuration
-// In production, set VITE_API_URL to your Render backend URL
 const axiosClient = axios.create({
   baseURL: API_URL,
   headers: {
