@@ -348,9 +348,32 @@
 
 /* Mobile responsiveness */
 @media (max-width: 768px) {
+  .attendance-table-container {
+    padding: 0 4px;
+  }
+  
+  .attendance-loading,
+  .attendance-empty {
+    padding: 50px 20px;
+    border-radius: 16px;
+  }
+  
+  .attendance-empty::before {
+    font-size: 40px;
+  }
+
   .table-wrapper {
     border-radius: 16px;
-    box-shadow: 0 2px 12px rgba(225, 29, 72, 0.06);
+    box-shadow: 
+      0 6px 0 rgba(8, 51, 68, 0.4),
+      0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+  
+  .table-wrapper:hover {
+    transform: none;
+    box-shadow: 
+      0 6px 0 rgba(8, 51, 68, 0.4),
+      0 8px 20px rgba(0, 0, 0, 0.25);
   }
 
   .attendance-table {
@@ -369,37 +392,185 @@
 
   .attendance-table tr {
     background: var(--bg-card);
-    margin-bottom: 16px;
-    border-radius: 16px;
-    box-shadow: var(--shadow-sm);
-    padding: 20px;
+    margin-bottom: 14px;
+    border-radius: 14px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+    padding: 16px;
     border: 1px solid var(--border-light);
     transition: all 0.2s ease;
   }
 
   .attendance-table tr:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    transform: none;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
   }
 
   .attendance-table td {
     padding: 10px 0;
     border: none;
+    border-bottom: 1px solid var(--border-light);
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+  
+  .attendance-table td:last-child {
+    border-bottom: none;
   }
 
   .attendance-table td::before {
     content: attr(data-label);
     font-weight: 700;
     color: var(--text-primary);
-    font-size: 12px;
+    font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
 
   .employee-info {
     text-align: right;
+  }
+  
+  .employee-name {
+    font-size: 14px;
+  }
+  
+  .employee-id {
+    font-size: 11px;
+    padding: 2px 6px;
+  }
+  
+  .time-badge {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  
+  .location-buttons {
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+  
+  .location-btn {
+    width: 100%;
+    text-align: center;
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+  
+  /* Map modal mobile */
+  .map-modal {
+    padding: 12px;
+  }
+  
+  .map-modal-content {
+    border-radius: 18px;
+    box-shadow: 
+      0 8px 0 rgba(8, 51, 68, 0.5),
+      0 15px 50px rgba(0, 0, 0, 0.45);
+  }
+  
+  .map-modal-header {
+    padding: 16px 18px;
+  }
+  
+  .map-modal-header h3 {
+    font-size: 16px;
+  }
+  
+  .close-btn {
+    padding: 6px 12px;
+    font-size: 18px;
+    border-radius: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .attendance-loading,
+  .attendance-empty {
+    padding: 40px 16px;
+    font-size: 14px;
+  }
+  
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border-width: 3px;
+  }
+  
+  .table-wrapper {
+    border-radius: 14px;
+  }
+  
+  .attendance-table tr {
+    padding: 14px 12px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+  }
+  
+  .attendance-table td {
+    padding: 8px 0;
+    font-size: 13px;
+  }
+  
+  .attendance-table td::before {
+    font-size: 10px;
+  }
+  
+  .employee-info {
+    max-width: 50%;
+  }
+  
+  .employee-name {
+    font-size: 13px;
+    word-break: break-word;
+  }
+  
+  .time-badge {
+    padding: 5px 10px;
+    font-size: 11px;
+    border-radius: 20px;
+  }
+  
+  .time-badge.checkin,
+  .time-badge.checkout,
+  .time-badge.pending {
+    box-shadow: 
+      0 2px 0 rgba(0, 0, 0, 0.1),
+      0 3px 6px rgba(0, 0, 0, 0.08);
+  }
+  
+  .location-btn {
+    padding: 8px 10px;
+    font-size: 11px;
+    border-radius: 8px;
+  }
+  
+  .no-location {
+    font-size: 11px;
+  }
+  
+  .map-modal-content {
+    border-radius: 16px;
+  }
+  
+  .map-modal-header {
+    padding: 14px 16px;
+  }
+  
+  .map-modal-header h3 {
+    font-size: 14px;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 360px) {
+  .attendance-table tr {
+    padding: 12px 10px;
+  }
+  
+  .time-badge {
+    padding: 4px 8px;
+    font-size: 10px;
   }
 }
