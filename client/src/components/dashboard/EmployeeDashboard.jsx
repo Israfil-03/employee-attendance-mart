@@ -10,7 +10,7 @@ import './Dashboard.css';
 
 const EmployeeDashboard = () => {
   const { user } = useAuth();
-  const [status, setStatus] = useState({ isCheckedIn: false, currentRecord: null });
+  const [status, setStatus] = useState({ isCheckedIn: false, hasCompletedToday: false, currentRecord: null });
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
@@ -226,9 +226,13 @@ const EmployeeDashboard = () => {
       {/* Status Card */}
       <div className="status-card">
         <div className="status-indicator">
-          <span className={`status-dot ${status.isCheckedIn ? 'checked-in' : 'checked-out'}`}></span>
+          <span className={`status-dot ${status.hasCompletedToday ? 'completed' : status.isCheckedIn ? 'checked-in' : 'checked-out'}`}></span>
           <span className="status-text">
-            {status.isCheckedIn ? 'Currently Checked In' : 'Not Checked In'}
+            {status.hasCompletedToday 
+              ? 'Attendance Completed for Today ✓' 
+              : status.isCheckedIn 
+                ? 'Currently Checked In' 
+                : 'Not Checked In'}
           </span>
         </div>
 
@@ -240,18 +244,24 @@ const EmployeeDashboard = () => {
           </div>
         )}
 
+        {status.hasCompletedToday && (
+          <div className="completed-info">
+            <p>🎉 Great job! You have completed your attendance for today.</p>
+          </div>
+        )}
+
         <div className="action-buttons">
           <button
             className="action-btn checkin-btn"
             onClick={handleCheckIn}
-            disabled={status.isCheckedIn || actionLoading || loading}
+            disabled={status.isCheckedIn || status.hasCompletedToday || actionLoading || loading}
           >
             {actionLoading ? '⏳ Processing...' : '📥 Check In'}
           </button>
           <button
             className="action-btn checkout-btn"
             onClick={handleCheckOut}
-            disabled={!status.isCheckedIn || actionLoading || loading}
+            disabled={!status.isCheckedIn || status.hasCompletedToday || actionLoading || loading}
           >
             {actionLoading ? '⏳ Processing...' : '📤 Check Out'}
           </button>

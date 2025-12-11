@@ -26,6 +26,12 @@ const checkIn = asyncHandler(async (req, res) => {
   debugLog('📍 Parsed location - lat:', latitude, 'lng:', longitude);
   debugLog('📍 Location types - lat:', typeof latitude, 'lng:', typeof longitude);
   
+  // Check if user has already completed attendance today
+  const completedToday = await attendanceModel.hasCompletedToday(userId);
+  if (completedToday) {
+    throw new ApiError(400, 'You have already completed your attendance for today. You can only check in once per day.');
+  }
+  
   // Check for existing open record (already checked in but not checked out)
   const openRecord = await attendanceModel.findOpenRecord(userId);
   
@@ -101,10 +107,12 @@ const getStatus = asyncHandler(async (req, res) => {
   const userId = req.user.id;
   
   const openRecord = await attendanceModel.findOpenRecord(userId);
+  const completedToday = await attendanceModel.hasCompletedToday(userId);
   
   res.json({
     success: true,
     isCheckedIn: !!openRecord,
+    hasCompletedToday: completedToday,
     currentRecord: openRecord ? {
       id: openRecord.id,
       checkInTime: openRecord.check_in_time,

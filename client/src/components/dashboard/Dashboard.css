@@ -157,6 +157,12 @@
   box-shadow: 0 0 0 6px rgba(249, 115, 22, 0.2);
 }
 
+.status-dot.completed {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  box-shadow: 0 0 0 6px rgba(139, 92, 246, 0.2), 0 0 20px rgba(139, 92, 246, 0.4);
+  animation: none;
+}
+
 @keyframes pulse {
   0%, 100% { 
     opacity: 1;
@@ -192,6 +198,22 @@
 .checkin-info strong {
   color: var(--primary-rose);
   font-weight: 600;
+}
+
+.completed-info {
+  margin-bottom: 24px;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+  border-radius: 12px;
+  display: inline-block;
+  border: 1px solid #c4b5fd;
+}
+
+.completed-info p {
+  margin: 0;
+  color: #7c3aed;
+  font-size: 15px;
+  font-weight: 500;
 }
 
 .action-buttons {
