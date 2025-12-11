@@ -9,7 +9,9 @@ import axios from 'axios';
 const getApiUrl = () => {
   // Check for Vite environment variable (set at build time)
   if (import.meta.env.VITE_API_URL) {
-    return import.meta.env.VITE_API_URL;
+    const url = import.meta.env.VITE_API_URL;
+    // Remove trailing slash if present
+    return url.endsWith('/') ? url.slice(0, -1) : url;
   }
   
   // Fallback: If we're on Render, construct the API URL
@@ -38,15 +40,17 @@ const API_URL = getApiUrl();
 
 console.log('🔗 API URL configured:', API_URL || '(using local proxy)');
 console.log('🌐 Current hostname:', typeof window !== 'undefined' ? window.location.hostname : 'N/A');
+console.log('📦 Environment Mode:', import.meta.env.MODE);
 
 // Create axios instance with base configuration
 const axiosClient = axios.create({
   baseURL: API_URL,
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
   },
   timeout: 30000, // 30 seconds
-  withCredentials: false // Set to false for cross-origin requests
+  withCredentials: true // Send cookies for same-origin, credentials for cross-origin
 });
 
 // Request interceptor - add auth token to requests
@@ -69,9 +73,12 @@ axiosClient.interceptors.request.use(
 axiosClient.interceptors.response.use(
   (response) => response,
   (error) => {
+    console.error('❌ API Error:', error);
+    
     // Handle common errors
     if (error.response) {
       const { status, data } = error.response;
+      console.error('📛 Response error:', status, data);
       
       // Unauthorized - token expired or invalid
       if (status === 401) {
@@ -93,15 +100,26 @@ axiosClient.interceptors.response.use(
       });
     }
     
-    // Network error
+    // Network error (no response received)
     if (error.request) {
+      console.error('📛 Network error - no response received');
+      console.error('📛 Request URL:', error.config?.url);
+      console.error('📛 Request baseURL:', error.config?.baseURL);
+      
+      // Check if it's a CORS error or server unreachable
+      const apiUrl = API_URL || 'the server';
       return Promise.reject({
         status: 0,
-        message: 'Network error. Please check your connection.'
+        message: `Cannot connect to ${apiUrl}. The server might be starting up (takes ~30s on free tier) or there's a network issue. Please try again.`
       });
     }
     
-    return Promise.reject(error);
+    // Request setup error
+    console.error('📛 Request setup error:', error.message);
+    return Promise.reject({
+      status: 0,
+      message: error.message || 'Failed to make request'
+    });
   }
 );
 

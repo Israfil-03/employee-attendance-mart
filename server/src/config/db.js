@@ -10,22 +10,57 @@
 const { Pool } = require('pg');
 const { DATABASE_URL, NODE_ENV } = require('./env');
 
-// Create connection pool
-const pool = new Pool({
-  connectionString: DATABASE_URL,
+// Parse and configure SSL for database connection
+const getPoolConfig = () => {
+  const config = {
+    connectionString: DATABASE_URL,
+  };
+  
   // SSL is required for Render's managed PostgreSQL
-  ssl: NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
-});
+  if (NODE_ENV === 'production') {
+    config.ssl = {
+      rejectUnauthorized: false
+    };
+  }
+  
+  return config;
+};
+
+// Create connection pool
+const pool = new Pool(getPoolConfig());
+
+// Log configuration (without sensitive data)
+console.log('📊 Database configuration:');
+console.log('   - Environment:', NODE_ENV);
+console.log('   - SSL enabled:', NODE_ENV === 'production');
+console.log('   - Connection string:', DATABASE_URL ? 'Configured ✓' : 'MISSING ❌');
 
 // Test connection on startup
 pool.on('connect', () => {
-  console.log('Connected to PostgreSQL database');
+  console.log('✓ Connected to PostgreSQL database');
 });
 
 pool.on('error', (err) => {
-  console.error('Unexpected error on idle client', err);
+  console.error('❌ Unexpected error on idle client', err);
   process.exit(-1);
 });
+
+/**
+ * Test database connection
+ * @returns {Promise<boolean>} True if connection successful
+ */
+const testConnection = async () => {
+  try {
+    const client = await pool.connect();
+    const result = await client.query('SELECT NOW()');
+    client.release();
+    console.log('✓ Database connection test successful:', result.rows[0].now);
+    return true;
+  } catch (error) {
+    console.error('❌ Database connection test failed:', error.message);
+    throw error;
+  }
+};
 
 /**
  * Execute a query with parameters
@@ -54,5 +89,6 @@ const getClient = () => pool.connect();
 module.exports = {
   query,
   getClient,
-  pool
+  pool,
+  testConnection
 };

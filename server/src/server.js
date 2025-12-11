@@ -11,6 +11,7 @@ const {
   DEFAULT_ADMIN_EMPLOYEE_ID,
   DEFAULT_ADMIN_PASSWORD
 } = require('./config/env');
+const { testConnection } = require('./config/db');
 const userModel = require('./models/userModel');
 const attendanceModel = require('./models/attendanceModel');
 const { hashPassword } = require('./utils/password');
@@ -20,7 +21,12 @@ const { hashPassword } = require('./utils/password');
  */
 const initializeDatabase = async () => {
   try {
-    console.log('Initializing database tables...');
+    console.log('Initializing database...');
+    
+    // Test connection first
+    await testConnection();
+    
+    console.log('Creating database tables...');
     
     // Create tables in order (users first due to foreign key)
     await userModel.createTable();
@@ -31,9 +37,9 @@ const initializeDatabase = async () => {
 
     await ensureDefaultAdmin();
     
-    console.log('Database initialization complete');
+    console.log('✓ Database initialization complete');
   } catch (error) {
-    console.error('Database initialization failed:', error);
+    console.error('❌ Database initialization failed:', error);
     throw error;
   }
 };
