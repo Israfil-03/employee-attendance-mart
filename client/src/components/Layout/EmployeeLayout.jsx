@@ -4,6 +4,7 @@
  */
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
+import logo from '../../img/logo.jpg';
 import './Layout.css';
 
 const EmployeeLayout = ({ children }) => {
@@ -15,6 +16,7 @@ const EmployeeLayout = ({ children }) => {
       <header className="layout-header">
         <div className="header-left">
           <div className="header-logo">
+            <img src={logo} alt="Company logo" className="logo-image" />
             <h1 className="header-title">Rose Mart</h1>
           </div>
         </div>
