@@ -4,10 +4,12 @@
  */
 import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 import './Layout.css';
 
 const AdminLayout = ({ children, activeTab, onTabChange }) => {
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const tabs = [
@@ -32,6 +34,13 @@ const AdminLayout = ({ children, activeTab, onTabChange }) => {
         <div className="header-right">
           <span className="user-name">{user?.name}</span>
           <span className="user-role admin-badge">Admin</span>
+          <button 
+            onClick={toggleTheme} 
+            className="theme-toggle"
+            title={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
+          >
+            <span className="theme-icon">{theme === 'light' ? '🌙' : '☀️'}</span>
+          </button>
           <button onClick={logout} className="logout-btn">
             Logout
           </button>

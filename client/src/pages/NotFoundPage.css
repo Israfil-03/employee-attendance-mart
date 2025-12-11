@@ -112,8 +112,8 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  background: white;
-  color: #e11d48;
+  background: var(--bg-card);
+  color: var(--primary-rose);
   padding: 18px 36px;
   border-radius: 14px;
   text-decoration: none;
@@ -126,7 +126,7 @@
 .back-link:hover {
   transform: translateY(-4px) scale(1.02);
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-  color: #be123c;
+  color: var(--primary-rose-dark);
 }
 
 @media (max-width: 480px) {

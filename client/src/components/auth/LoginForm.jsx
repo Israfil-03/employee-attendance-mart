@@ -5,10 +5,12 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 import './AuthForms.css';
 
 const LoginForm = () => {
   const { login } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const [formData, setFormData] = useState({
     identifier: '',
     password: ''
@@ -48,6 +50,13 @@ const LoginForm = () => {
 
   return (
     <div className="auth-container">
+      <button 
+        onClick={toggleTheme} 
+        className="auth-theme-toggle"
+        title={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
+      >
+        {theme === 'light' ? '🌙' : '☀️'}
+      </button>
       <div className="auth-card">
         <div className="auth-header">
           <h1>Rose Mart</h1>
