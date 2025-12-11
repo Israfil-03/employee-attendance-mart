@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
+import logo from '../../img/logo.jpg';
 import './AuthForms.css';
 
 const SignupForm = () => {
@@ -87,6 +88,9 @@ const SignupForm = () => {
       </button>
       <div className="auth-card">
         <div className="auth-header">
+          <div className="auth-logo">
+            <img src={logo} alt="Company logo" />
+          </div>
           <h1>Join Rose Mart</h1>
           <p>Create your attendance account</p>
         </div>
