@@ -12,11 +12,22 @@ const getApiUrl = () => {
     return import.meta.env.VITE_API_URL;
   }
   
-  // Fallback: If we're on a .onrender.com domain, construct the API URL
-  if (typeof window !== 'undefined' && window.location.hostname.includes('onrender.com')) {
-    // Replace 'web' with 'api' in the hostname
-    const apiHost = window.location.hostname.replace('-web.onrender.com', '-api.onrender.com');
-    return `https://${apiHost}`;
+  // Fallback: If we're on Render, construct the API URL
+  if (typeof window !== 'undefined') {
+    const hostname = window.location.hostname;
+    
+    // If on Render static site, convert to API URL
+    // employee-attendance-web.onrender.com -> employee-attendance-api.onrender.com
+    if (hostname.includes('onrender.com')) {
+      // Handle the specific naming pattern
+      if (hostname.includes('employee-attendance-web')) {
+        return 'https://employee-attendance-api.onrender.com';
+      }
+      // Generic pattern: replace -web with -api
+      if (hostname.includes('-web')) {
+        return `https://${hostname.replace('-web', '-api')}`;
+      }
+    }
   }
   
   // Development: use empty string (Vite proxy handles it)
@@ -25,7 +36,8 @@ const getApiUrl = () => {
 
 const API_URL = getApiUrl();
 
-console.log('API URL configured:', API_URL || '(using local proxy)');
+console.log('🔗 API URL configured:', API_URL || '(using local proxy)');
+console.log('🌐 Current hostname:', typeof window !== 'undefined' ? window.location.hostname : 'N/A');
 
 // Create axios instance with base configuration
 const axiosClient = axios.create({
@@ -40,6 +52,7 @@ const axiosClient = axios.create({
 // Request interceptor - add auth token to requests
 axiosClient.interceptors.request.use(
   (config) => {
+    console.log('📤 API Request:', config.method?.toUpperCase(), config.baseURL + config.url);
     const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -47,6 +60,7 @@ axiosClient.interceptors.request.use(
     return config;
   },
   (error) => {
+    console.error('❌ Request Error:', error);
     return Promise.reject(error);
   }
 );
