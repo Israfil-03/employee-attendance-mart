@@ -29,7 +29,7 @@ const AdminLayout = ({ children, activeTab, onTabChange }) => {
           </button>
           <div className="header-logo">
             <span className="logo-icon">⚙️</span>
-            <h1 className="header-title">Admin Panel</h1>
+            <h1 className="header-title">ROSE MART Admin Panel</h1>
           </div>
         </div>
         <div className="header-right">

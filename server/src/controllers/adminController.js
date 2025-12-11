@@ -42,18 +42,18 @@ const createEmployee = asyncHandler(async (req, res) => {
   const { name, mobileNumber, employeeId, password, role } = req.body;
   
   // Validate required fields
-  if (!name || !mobileNumber || !password) {
-    throw new ApiError(400, 'Name, mobile number, and password are required');
+  if (!name || !mobileNumber) {
+    throw new ApiError(400, 'Name and mobile number are required');
+  }
+  
+  // Employee ID is required for employees (they login with it)
+  if (!employeeId) {
+    throw new ApiError(400, 'Employee ID is required');
   }
   
   // Validate mobile number format
   if (!/^\d{10,15}$/.test(mobileNumber.replace(/[^\d]/g, ''))) {
     throw new ApiError(400, 'Invalid mobile number format');
-  }
-  
-  // Validate password length
-  if (password.length < 6) {
-    throw new ApiError(400, 'Password must be at least 6 characters');
   }
   
   // Check if mobile number already exists
@@ -62,24 +62,24 @@ const createEmployee = asyncHandler(async (req, res) => {
     throw new ApiError(400, 'Mobile number already registered');
   }
   
-  // Check if employee ID already exists (if provided)
-  if (employeeId) {
-    const existingEmployee = await userModel.findByEmployeeId(employeeId);
-    if (existingEmployee) {
-      throw new ApiError(400, 'Employee ID already exists');
-    }
+  // Check if employee ID already exists
+  const existingEmployee = await userModel.findByEmployeeId(employeeId);
+  if (existingEmployee) {
+    throw new ApiError(400, 'Employee ID already exists');
   }
   
-  // Hash password
-  const passwordHash = await hashPassword(password);
+  // For employees, we don't need a real password since they login with employee ID only
+  // Create a placeholder hash (they won't use password login)
+  const placeholderPassword = `EMP_${employeeId}_${Date.now()}`;
+  const passwordHash = await hashPassword(placeholderPassword);
   
-  // Create user
+  // Create user (role is always 'employee' from this form)
   const user = await userModel.create({
     name,
     mobileNumber,
-    employeeId: employeeId || null,
+    employeeId,
     passwordHash,
-    role: role || 'employee'
+    role: 'employee'
   });
   
   res.status(201).json({

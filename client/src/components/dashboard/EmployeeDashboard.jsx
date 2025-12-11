@@ -106,6 +106,13 @@ const EmployeeDashboard = () => {
       console.log('📍 Check-in location obtained:', location);
       console.log('📍 Location types - lat:', typeof location.latitude, 'lng:', typeof location.longitude);
       
+      // Check if location is available - REQUIRED for check-in
+      if (location.locationError || location.latitude === null || location.longitude === null) {
+        setError('Location is required for check-in. Please enable location access and try again.');
+        setActionLoading(false);
+        return;
+      }
+      
       // Prepare the data to send (only send latitude and longitude)
       const checkInData = {
         latitude: location.latitude,
@@ -118,12 +125,7 @@ const EmployeeDashboard = () => {
       const response = await attendanceApi.checkIn(checkInData);
       console.log('📍 Check-in response:', response);
       
-      // Show appropriate message based on location status
-      if (location.locationError) {
-        setSuccess(`Check-in successful! (Note: ${location.locationError})`);
-      } else {
-        setSuccess('Check-in successful!');
-      }
+      setSuccess('Check-in successful!');
       await fetchData();
     } catch (err) {
       setError(err.message || 'Check-in failed');
@@ -146,6 +148,13 @@ const EmployeeDashboard = () => {
       console.log('📍 Check-out location obtained:', location);
       console.log('📍 Location types - lat:', typeof location.latitude, 'lng:', typeof location.longitude);
       
+      // Check if location is available - REQUIRED for check-out
+      if (location.locationError || location.latitude === null || location.longitude === null) {
+        setError('Location is required for check-out. Please enable location access and try again.');
+        setActionLoading(false);
+        return;
+      }
+      
       // Prepare the data to send (only send latitude and longitude)
       const checkOutData = {
         latitude: location.latitude,
@@ -158,12 +167,7 @@ const EmployeeDashboard = () => {
       const response = await attendanceApi.checkOut(checkOutData);
       console.log('📍 Check-out response:', response);
       
-      // Show appropriate message based on location status
-      if (location.locationError) {
-        setSuccess(`Check-out successful! (Note: ${location.locationError})`);
-      } else {
-        setSuccess('Check-out successful!');
-      }
+      setSuccess('Check-out successful!');
       await fetchData();
     } catch (err) {
       setError(err.message || 'Check-out failed');

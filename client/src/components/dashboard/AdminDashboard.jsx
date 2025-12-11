@@ -185,7 +185,6 @@ const AddEmployeeForm = ({ onSubmit, onCancel }) => {
     name: '',
     mobileNumber: '',
     employeeId: '',
-    password: '',
     role: 'employee'
   });
   const [loading, setLoading] = useState(false);
@@ -200,13 +199,13 @@ const AddEmployeeForm = ({ onSubmit, onCancel }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!formData.name || !formData.mobileNumber || !formData.password) {
+    if (!formData.name || !formData.mobileNumber) {
       setError('Please fill in all required fields');
       return;
     }
-
-    if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters');
+    
+    if (!formData.employeeId) {
+      setError('Employee ID is required for employee login');
       return;
     }
 
@@ -254,13 +253,13 @@ const AddEmployeeForm = ({ onSubmit, onCancel }) => {
 
         <div className="form-row">
           <div className="form-group">
-            <label>Employee ID</label>
+            <label>Employee ID *</label>
             <input
               type="text"
               name="employeeId"
               value={formData.employeeId}
               onChange={handleChange}
-              placeholder="Optional"
+              placeholder="Required for login"
               disabled={loading}
             />
           </div>
@@ -273,21 +272,8 @@ const AddEmployeeForm = ({ onSubmit, onCancel }) => {
               disabled={loading}
             >
               <option value="employee">Employee</option>
-              <option value="admin">Admin</option>
             </select>
           </div>
-        </div>
-
-        <div className="form-group">
-          <label>Initial Password *</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            placeholder="Min 6 characters"
-            disabled={loading}
-          />
         </div>
 
         <div className="form-actions">
