@@ -1,5 +1,5 @@
 /**
- * Location Map Styles - Rose Mart Theme
+ * Location Map Styles - Dark Cyan Theme
  */
 
 .map-container {
@@ -15,7 +15,7 @@
   align-items: center;
   justify-content: center;
   background: var(--bg-light);
-  border: 2px dashed var(--primary-rose-light);
+  border: 2px dashed var(--primary-cyan-light);
   border-radius: 16px;
   color: var(--text-secondary);
   transition: background-color var(--transition-medium);
@@ -55,5 +55,5 @@
 }
 
 .leaflet-popup-content strong {
-  color: #e11d48;
+  color: #0891b2;
 }

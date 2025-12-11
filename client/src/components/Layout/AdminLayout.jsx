@@ -5,7 +5,6 @@
 import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
-import logo from '../../img/logo.jpg';
 import './Layout.css';
 
 const AdminLayout = ({ children, activeTab, onTabChange }) => {
@@ -29,8 +28,8 @@ const AdminLayout = ({ children, activeTab, onTabChange }) => {
             ☰
           </button>
           <div className="header-logo">
-            <img src={logo} alt="Company logo" className="logo-image" />
-            <h1 className="header-title">Rose Mart Admin</h1>
+            <span className="logo-icon">⚙️</span>
+            <h1 className="header-title">Admin Panel</h1>
           </div>
         </div>
         <div className="header-right">
@@ -69,7 +68,7 @@ const AdminLayout = ({ children, activeTab, onTabChange }) => {
       </main>
 
       <footer className="layout-footer">
-        <p>&copy; {new Date().getFullYear()} Rose Mart - Admin Panel</p>
+        <p>&copy; {new Date().getFullYear()} Attendance System - Admin Panel</p>
       </footer>
     </div>
   );

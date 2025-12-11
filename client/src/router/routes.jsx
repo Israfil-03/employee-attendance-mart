@@ -7,7 +7,6 @@ import { useAuth } from '../context/AuthContext';
 
 // Pages
 import LoginPage from '../pages/LoginPage';
-import SignupPage from '../pages/SignupPage';
 import EmployeeDashboardPage from '../pages/EmployeeDashboardPage';
 import AdminDashboardPage from '../pages/AdminDashboardPage';
 import NotFoundPage from '../pages/NotFoundPage';
@@ -85,14 +84,6 @@ const AppRoutes = () => {
         element={
           <PublicRoute>
             <LoginPage />
-          </PublicRoute>
-        }
-      />
-      <Route
-        path="/signup"
-        element={
-          <PublicRoute>
-            <SignupPage />
           </PublicRoute>
         }
       />

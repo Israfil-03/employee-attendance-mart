@@ -4,7 +4,6 @@
  */
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
-import logo from '../../img/logo.jpg';
 import './Layout.css';
 
 const EmployeeLayout = ({ children }) => {
@@ -16,8 +15,8 @@ const EmployeeLayout = ({ children }) => {
       <header className="layout-header">
         <div className="header-left">
           <div className="header-logo">
-            <img src={logo} alt="Company logo" className="logo-image" />
-            <h1 className="header-title">Rose Mart</h1>
+            <span className="logo-icon">📊</span>
+            <h1 className="header-title">Attendance System</h1>
           </div>
         </div>
         <div className="header-right">
@@ -39,7 +38,7 @@ const EmployeeLayout = ({ children }) => {
         {children}
       </main>
       <footer className="layout-footer">
-        <p>&copy; {new Date().getFullYear()} Rose Mart Attendance System</p>
+        <p>&copy; {new Date().getFullYear()} Employee Attendance System</p>
       </footer>
     </div>
   );

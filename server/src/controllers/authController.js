@@ -76,7 +76,7 @@ const signup = asyncHandler(async (req, res) => {
 });
 
 /**
- * Login user
+ * Login user (Admin with password)
  * POST /api/auth/login
  */
 const login = asyncHandler(async (req, res) => {
@@ -124,6 +124,52 @@ const login = asyncHandler(async (req, res) => {
 });
 
 /**
+ * Login employee with ID only (no password required)
+ * POST /api/auth/login-employee
+ */
+const loginEmployee = asyncHandler(async (req, res) => {
+  const { employeeId } = req.body;
+  
+  // Validate required fields
+  if (!employeeId) {
+    throw new ApiError(400, 'Employee ID is required');
+  }
+  
+  // Find user by employee ID
+  const user = await userModel.findByEmployeeId(employeeId);
+  
+  if (!user) {
+    throw new ApiError(401, 'Employee not found. Please check your Employee ID.');
+  }
+  
+  // Ensure it's an employee account (not admin)
+  if (user.role === 'admin') {
+    throw new ApiError(401, 'Admin accounts must use password login');
+  }
+  
+  // Check if user is active
+  if (!user.is_active) {
+    throw new ApiError(401, 'Account has been deactivated. Contact administrator.');
+  }
+  
+  // Generate token
+  const token = generateToken(user);
+  
+  res.json({
+    success: true,
+    message: 'Login successful',
+    token,
+    user: {
+      id: user.id,
+      name: user.name,
+      employeeId: user.employee_id,
+      mobileNumber: user.mobile_number,
+      role: user.role
+    }
+  });
+});
+
+/**
  * Get current user profile
  * GET /api/auth/me
  */
@@ -151,5 +197,6 @@ const getProfile = asyncHandler(async (req, res) => {
 module.exports = {
   signup,
   login,
+  loginEmployee,
   getProfile
 };
