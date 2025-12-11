@@ -55,6 +55,40 @@ const findOpenRecord = async (userId) => {
 };
 
 /**
+ * Check if user has already checked in today (regardless of check-out status)
+ * @param {number} userId 
+ * @returns {Object|null} Today's record or null
+ */
+const findTodayRecord = async (userId) => {
+  const result = await db.query(
+    `SELECT * FROM attendance_records 
+     WHERE user_id = $1 
+     AND DATE(check_in_time) = CURRENT_DATE
+     ORDER BY check_in_time DESC
+     LIMIT 1`,
+    [userId]
+  );
+  return result.rows[0] || null;
+};
+
+/**
+ * Check if user has completed attendance today (both check-in and check-out done)
+ * @param {number} userId 
+ * @returns {boolean} True if user has completed attendance today
+ */
+const hasCompletedToday = async (userId) => {
+  const result = await db.query(
+    `SELECT * FROM attendance_records 
+     WHERE user_id = $1 
+     AND DATE(check_in_time) = CURRENT_DATE
+     AND check_out_time IS NOT NULL
+     LIMIT 1`,
+    [userId]
+  );
+  return result.rows.length > 0;
+};
+
+/**
  * Create a check-in record
  * @param {Object} data 
  * @returns {Object} Created attendance record
@@ -216,6 +250,8 @@ const getSummary = async (userId, { from, to } = {}) => {
 module.exports = {
   createTable,
   findOpenRecord,
+  findTodayRecord,
+  hasCompletedToday,
   checkIn,
   checkOut,
   findByUserId,
