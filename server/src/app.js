@@ -17,13 +17,15 @@ const app = express();
 
 // ============= Middleware =============
 
-// CORS configuration - Allow all origins for simplicity
-// In a real production app, you'd want to restrict this
+// Handle preflight requests FIRST
+app.options('*', cors());
+
+// CORS configuration - Allow all origins
 app.use(cors({
-  origin: true, // Allow all origins
-  credentials: true,
+  origin: '*', // Allow all origins explicitly
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+  credentials: false // Set to false when using origin: '*'
 }));
 
 // Parse JSON bodies
