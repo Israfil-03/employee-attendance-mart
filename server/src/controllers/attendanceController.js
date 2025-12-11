@@ -4,6 +4,14 @@
  */
 const attendanceModel = require('../models/attendanceModel');
 const { asyncHandler, ApiError } = require('../middleware/errorMiddleware');
+const { NODE_ENV } = require('../config/env');
+
+// Helper for debug logging
+const debugLog = (...args) => {
+  if (NODE_ENV === 'development') {
+    console.log(...args);
+  }
+};
 
 /**
  * Check-in employee
@@ -12,6 +20,11 @@ const { asyncHandler, ApiError } = require('../middleware/errorMiddleware');
 const checkIn = asyncHandler(async (req, res) => {
   const userId = req.user.id;
   const { latitude, longitude } = req.body;
+  
+  // Debug logging for location data
+  debugLog('📍 Check-in request body:', JSON.stringify(req.body));
+  debugLog('📍 Parsed location - lat:', latitude, 'lng:', longitude);
+  debugLog('📍 Location types - lat:', typeof latitude, 'lng:', typeof longitude);
   
   // Check for existing open record (already checked in but not checked out)
   const openRecord = await attendanceModel.findOpenRecord(userId);
@@ -46,6 +59,11 @@ const checkIn = asyncHandler(async (req, res) => {
 const checkOut = asyncHandler(async (req, res) => {
   const userId = req.user.id;
   const { latitude, longitude } = req.body;
+  
+  // Debug logging for location data
+  debugLog('📍 Check-out request body:', JSON.stringify(req.body));
+  debugLog('📍 Parsed location - lat:', latitude, 'lng:', longitude);
+  debugLog('📍 Location types - lat:', typeof latitude, 'lng:', typeof longitude);
   
   // Find open record
   const openRecord = await attendanceModel.findOpenRecord(userId);

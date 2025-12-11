@@ -130,7 +130,7 @@ const AttendanceTable = ({
                 </td>
                 <td data-label="Location">
                   <div className="location-buttons">
-                    {record.checkInLatitude && record.checkInLongitude && (
+                    {record.checkInLatitude != null && record.checkInLongitude != null && (
                       <button 
                         className="location-btn"
                         onClick={() => handleViewLocation(record, 'checkin')}
@@ -139,7 +139,7 @@ const AttendanceTable = ({
                         📍 In
                       </button>
                     )}
-                    {record.checkOutLatitude && record.checkOutLongitude && (
+                    {record.checkOutLatitude != null && record.checkOutLongitude != null && (
                       <button 
                         className="location-btn"
                         onClick={() => handleViewLocation(record, 'checkout')}
@@ -148,7 +148,7 @@ const AttendanceTable = ({
                         📍 Out
                       </button>
                     )}
-                    {!record.checkInLatitude && !record.checkOutLatitude && (
+                    {record.checkInLatitude == null && record.checkOutLatitude == null && (
                       <span className="no-location">N/A</span>
                     )}
                   </div>

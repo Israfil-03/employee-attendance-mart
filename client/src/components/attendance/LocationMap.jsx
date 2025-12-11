@@ -22,8 +22,8 @@ const LocationMap = ({
   height = '300px',
   zoom = 15 
 }) => {
-  // Validate coordinates
-  if (!lat || !lng || isNaN(lat) || isNaN(lng)) {
+  // Validate coordinates - use null check to allow 0 as valid coordinate
+  if (lat == null || lng == null || isNaN(lat) || isNaN(lng)) {
     return (
       <div className="map-placeholder" style={{ height }}>
         <p>📍 Location not available</p>

@@ -3,6 +3,14 @@
  * Handles all database operations for attendance_records table
  */
 const db = require('../config/db');
+const { NODE_ENV } = require('../config/env');
+
+// Helper for debug logging
+const debugLog = (...args) => {
+  if (NODE_ENV === 'development') {
+    console.log(...args);
+  }
+};
 
 /**
  * Create the attendance_records table if it doesn't exist
@@ -52,12 +60,14 @@ const findOpenRecord = async (userId) => {
  * @returns {Object} Created attendance record
  */
 const checkIn = async ({ userId, latitude, longitude }) => {
+  debugLog('📊 DB checkIn - userId:', userId, 'lat:', latitude, 'lng:', longitude);
   const result = await db.query(
     `INSERT INTO attendance_records (user_id, check_in_time, check_in_latitude, check_in_longitude)
      VALUES ($1, NOW(), $2, $3)
      RETURNING *`,
     [userId, latitude, longitude]
   );
+  debugLog('📊 DB checkIn result:', JSON.stringify(result.rows[0]));
   return result.rows[0];
 };
 
@@ -68,6 +78,7 @@ const checkIn = async ({ userId, latitude, longitude }) => {
  * @returns {Object} Updated attendance record
  */
 const checkOut = async (recordId, { latitude, longitude }) => {
+  debugLog('📊 DB checkOut - recordId:', recordId, 'lat:', latitude, 'lng:', longitude);
   const result = await db.query(
     `UPDATE attendance_records 
      SET check_out_time = NOW(), 
@@ -77,6 +88,7 @@ const checkOut = async (recordId, { latitude, longitude }) => {
      RETURNING *`,
     [latitude, longitude, recordId]
   );
+  debugLog('📊 DB checkOut result:', JSON.stringify(result.rows[0]));
   return result.rows[0];
 };
 

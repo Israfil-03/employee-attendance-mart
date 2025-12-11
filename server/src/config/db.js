@@ -17,7 +17,10 @@ const getPoolConfig = () => {
   };
   
   // SSL is required for Render's managed PostgreSQL
-  if (NODE_ENV === 'production') {
+  // Enable SSL if connecting to a remote database (contains 'render.com' or 'postgres')
+  // or if explicitly in production mode
+  const isRemoteDb = DATABASE_URL && (DATABASE_URL.includes('render.com') || DATABASE_URL.includes('.postgres.'));
+  if (NODE_ENV === 'production' || isRemoteDb) {
     config.ssl = {
       rejectUnauthorized: false
     };
@@ -26,13 +29,17 @@ const getPoolConfig = () => {
   return config;
 };
 
+// Check if SSL should be enabled
+const isRemoteDb = DATABASE_URL && (DATABASE_URL.includes('render.com') || DATABASE_URL.includes('.postgres.'));
+const sslEnabled = NODE_ENV === 'production' || isRemoteDb;
+
 // Create connection pool
 const pool = new Pool(getPoolConfig());
 
 // Log configuration (without sensitive data)
 console.log('📊 Database configuration:');
 console.log('   - Environment:', NODE_ENV);
-console.log('   - SSL enabled:', NODE_ENV === 'production');
+console.log('   - SSL enabled:', sslEnabled);
 console.log('   - Connection string:', DATABASE_URL ? 'Configured ✓' : 'MISSING ❌');
 
 // Test connection on startup

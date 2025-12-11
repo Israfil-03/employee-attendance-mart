@@ -45,25 +45,47 @@ const EmployeeDashboard = () => {
   const getCurrentLocation = () => {
     return new Promise((resolve, reject) => {
       if (!navigator.geolocation) {
+        console.error('📍 Geolocation not supported by browser');
         reject(new Error('Geolocation is not supported by your browser'));
         return;
       }
 
+      console.log('📍 Requesting geolocation...');
+      
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          resolve({
+          const coords = {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude
-          });
+          };
+          console.log('📍 Geolocation success:', coords);
+          resolve(coords);
         },
         (error) => {
-          console.warn('Geolocation error:', error);
-          // Resolve with null location instead of rejecting
-          resolve({ latitude: null, longitude: null });
+          console.error('📍 Geolocation error code:', error.code);
+          console.error('📍 Geolocation error message:', error.message);
+          
+          // Provide more specific error messages
+          let errorMessage = 'Location access failed';
+          switch (error.code) {
+            case error.PERMISSION_DENIED:
+              errorMessage = 'Location permission denied. Please enable location access.';
+              break;
+            case error.POSITION_UNAVAILABLE:
+              errorMessage = 'Location information unavailable.';
+              break;
+            case error.TIMEOUT:
+              errorMessage = 'Location request timed out.';
+              break;
+          }
+          
+          // Resolve with null location but log the error
+          console.warn('📍 Proceeding without location:', errorMessage);
+          resolve({ latitude: null, longitude: null, locationError: errorMessage });
         },
         {
           enableHighAccuracy: true,
-          timeout: 10000,
+          timeout: 15000,
           maximumAge: 60000
         }
       );
@@ -80,10 +102,28 @@ const EmployeeDashboard = () => {
       // Get location
       const location = await getCurrentLocation();
       
-      // Perform check-in
-      await attendanceApi.checkIn(location);
+      // Debug logging
+      console.log('📍 Check-in location obtained:', location);
+      console.log('📍 Location types - lat:', typeof location.latitude, 'lng:', typeof location.longitude);
       
-      setSuccess('Check-in successful!');
+      // Prepare the data to send (only send latitude and longitude)
+      const checkInData = {
+        latitude: location.latitude,
+        longitude: location.longitude
+      };
+      
+      console.log('📍 Sending check-in data:', JSON.stringify(checkInData));
+      
+      // Perform check-in
+      const response = await attendanceApi.checkIn(checkInData);
+      console.log('📍 Check-in response:', response);
+      
+      // Show appropriate message based on location status
+      if (location.locationError) {
+        setSuccess(`Check-in successful! (Note: ${location.locationError})`);
+      } else {
+        setSuccess('Check-in successful!');
+      }
       await fetchData();
     } catch (err) {
       setError(err.message || 'Check-in failed');
@@ -102,10 +142,28 @@ const EmployeeDashboard = () => {
       // Get location
       const location = await getCurrentLocation();
       
-      // Perform check-out
-      await attendanceApi.checkOut(location);
+      // Debug logging
+      console.log('📍 Check-out location obtained:', location);
+      console.log('📍 Location types - lat:', typeof location.latitude, 'lng:', typeof location.longitude);
       
-      setSuccess('Check-out successful!');
+      // Prepare the data to send (only send latitude and longitude)
+      const checkOutData = {
+        latitude: location.latitude,
+        longitude: location.longitude
+      };
+      
+      console.log('📍 Sending check-out data:', JSON.stringify(checkOutData));
+      
+      // Perform check-out
+      const response = await attendanceApi.checkOut(checkOutData);
+      console.log('📍 Check-out response:', response);
+      
+      // Show appropriate message based on location status
+      if (location.locationError) {
+        setSuccess(`Check-out successful! (Note: ${location.locationError})`);
+      } else {
+        setSuccess('Check-out successful!');
+      }
       await fetchData();
     } catch (err) {
       setError(err.message || 'Check-out failed');

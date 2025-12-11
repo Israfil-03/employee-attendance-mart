@@ -56,6 +56,7 @@ const axiosClient = axios.create({
 axiosClient.interceptors.request.use(
   (config) => {
     console.log('📤 API Request:', config.method?.toUpperCase(), config.baseURL + config.url);
+    console.log('📤 Request Data:', JSON.stringify(config.data));
     const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
