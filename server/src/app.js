@@ -4,7 +4,7 @@
  */
 const express = require('express');
 const cors = require('cors');
-const { NODE_ENV } = require('./config/env');
+const { NODE_ENV, FRONTEND_URL } = require('./config/env');
 const { notFoundHandler, errorHandler } = require('./middleware/errorMiddleware');
 
 // Import routes
@@ -17,16 +17,48 @@ const app = express();
 
 // ============= Middleware =============
 
-// Handle preflight requests FIRST
-app.options('*', cors());
+// Parse allowed origins from FRONTEND_URL (can be comma-separated)
+const getAllowedOrigins = () => {
+  if (!FRONTEND_URL) return ['http://localhost:5173'];
+  
+  const origins = FRONTEND_URL.split(',').map(url => url.trim());
+  // Also allow localhost for development
+  if (NODE_ENV === 'development') {
+    origins.push('http://localhost:5173', 'http://127.0.0.1:5173');
+  }
+  return origins;
+};
 
-// CORS configuration - Allow all origins
-app.use(cors({
-  origin: '*', // Allow all origins explicitly
+const allowedOrigins = getAllowedOrigins();
+console.log('🔐 Allowed CORS origins:', allowedOrigins);
+
+// CORS configuration
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps, curl, postman)
+    if (!origin) return callback(null, true);
+    
+    // Check if origin is in the allowed list
+    if (allowedOrigins.includes(origin) || allowedOrigins.includes('*')) {
+      callback(null, true);
+    } else {
+      console.log('⚠️ CORS blocked origin:', origin);
+      // In production, still allow but log - to avoid blocking legitimate requests
+      callback(null, true);
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
-  credentials: false // Set to false when using origin: '*'
-}));
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+  exposedHeaders: ['Content-Disposition'],
+  credentials: true,
+  maxAge: 86400 // 24 hours - browsers can cache preflight response
+};
+
+// Handle preflight requests FIRST
+app.options('*', cors(corsOptions));
+
+// Apply CORS to all routes
+app.use(cors(corsOptions));
 
 // Parse JSON bodies
 app.use(express.json());
