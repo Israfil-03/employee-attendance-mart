@@ -17,7 +17,7 @@ services:
       - key: JWT_SECRET
         generateValue: true
       - key: FRONTEND_URL
-        value: https://employee-attendance-mart-1.onrender.com
+        value: https://employee-attendance-mart-1-h8us.onrender.com
       - key: NODE_ENV
         value: production
       - key: DEFAULT_ADMIN_NAME
@@ -40,7 +40,7 @@ services:
     staticPublishPath: dist
     envVars:
       - key: VITE_API_URL
-        value: https://employee-attendance-mart.onrender.com
+        value: https://employee-attendance-mart-n7pj.onrender.com
     routes:
       - type: rewrite
         source: /*
