@@ -49,29 +49,48 @@ const ensureDefaultAdmin = async () => {
     return;
   }
 
-  const existingAdmin = await userModel.findByMobileNumber(DEFAULT_ADMIN_MOBILE);
+  try {
+    // Check if admin exists by mobile number
+    const existingByMobile = await userModel.findByMobileNumber(DEFAULT_ADMIN_MOBILE);
+    if (existingByMobile) {
+      console.log('✓ Default admin already exists (found by mobile)');
+      return;
+    }
 
-  if (existingAdmin) {
-    console.log('✓ Default admin already exists');
-    return;
+    // Also check if admin exists by employee ID (to prevent duplicate key error)
+    if (DEFAULT_ADMIN_EMPLOYEE_ID) {
+      const existingByEmployeeId = await userModel.findByEmployeeId(DEFAULT_ADMIN_EMPLOYEE_ID);
+      if (existingByEmployeeId) {
+        console.log('✓ Default admin already exists (found by employee ID)');
+        return;
+      }
+    }
+
+    const passwordHash = await hashPassword(DEFAULT_ADMIN_PASSWORD);
+
+    await userModel.create({
+      name: DEFAULT_ADMIN_NAME,
+      mobileNumber: DEFAULT_ADMIN_MOBILE,
+      employeeId: DEFAULT_ADMIN_EMPLOYEE_ID || null,
+      passwordHash,
+      role: 'admin'
+    });
+
+    console.log('✓ Default admin created');
+    console.log(`  Mobile: ${DEFAULT_ADMIN_MOBILE}`);
+    if (DEFAULT_ADMIN_EMPLOYEE_ID) {
+      console.log(`  Employee ID: ${DEFAULT_ADMIN_EMPLOYEE_ID}`);
+    }
+    console.log('  ⚠️  Update DEFAULT_ADMIN_PASSWORD after first login');
+  } catch (error) {
+    // If it's a duplicate key error, the admin already exists - that's fine
+    if (error.code === '23505') {
+      console.log('✓ Admin user already exists in database');
+      return;
+    }
+    // For other errors, rethrow
+    throw error;
   }
-
-  const passwordHash = await hashPassword(DEFAULT_ADMIN_PASSWORD);
-
-  await userModel.create({
-    name: DEFAULT_ADMIN_NAME,
-    mobileNumber: DEFAULT_ADMIN_MOBILE,
-    employeeId: DEFAULT_ADMIN_EMPLOYEE_ID || null,
-    passwordHash,
-    role: 'admin'
-  });
-
-  console.log('✓ Default admin created');
-  console.log(`  Mobile: ${DEFAULT_ADMIN_MOBILE}`);
-  if (DEFAULT_ADMIN_EMPLOYEE_ID) {
-    console.log(`  Employee ID: ${DEFAULT_ADMIN_EMPLOYEE_ID}`);
-  }
-  console.log('  ⚠️  Update DEFAULT_ADMIN_PASSWORD after first login');
 };
 
 /**
