@@ -7,7 +7,8 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #fef7f8;
+  background-color: var(--bg-light);
+  transition: background-color var(--transition-medium);
 }
 
 /* Header */
@@ -136,12 +137,13 @@
 
 /* Navigation */
 .layout-nav {
-  background: white;
+  background: var(--bg-card);
   padding: 0 28px;
   display: flex;
   gap: 8px;
-  border-bottom: 1px solid #fce7f3;
-  box-shadow: 0 2px 8px rgba(225, 29, 72, 0.06);
+  border-bottom: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+  transition: background-color var(--transition-medium), border-color var(--transition-medium);
 }
 
 .nav-tab {
@@ -151,7 +153,7 @@
   font-size: 14px;
   font-weight: 600;
   font-family: inherit;
-  color: #6b7280;
+  color: var(--text-secondary);
   cursor: pointer;
   border-bottom: 3px solid transparent;
   transition: all 0.3s ease;
@@ -159,14 +161,14 @@
 }
 
 .nav-tab:hover {
-  color: #e11d48;
-  background: #fef7f8;
+  color: var(--primary-rose);
+  background: var(--bg-light);
 }
 
 .nav-tab.active {
-  color: #e11d48;
-  border-bottom-color: #e11d48;
-  background: linear-gradient(to bottom, transparent 0%, #fef7f8 100%);
+  color: var(--primary-rose);
+  border-bottom-color: var(--primary-rose);
+  background: linear-gradient(to bottom, transparent 0%, var(--bg-light) 100%);
 }
 
 .nav-tab.active::after {
@@ -177,7 +179,7 @@
   transform: translateX(-50%);
   width: 8px;
   height: 8px;
-  background: #e11d48;
+  background: var(--primary-rose);
   border-radius: 50%;
   bottom: -5px;
 }
@@ -200,12 +202,13 @@
 
 /* Footer */
 .layout-footer {
-  background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
-  color: #9ca3af;
+  background: var(--footer-bg);
+  color: var(--footer-text);
   padding: 20px 28px;
   text-align: center;
   font-size: 14px;
-  border-top: 3px solid #e11d48;
+  border-top: 3px solid var(--primary-rose);
+  transition: background var(--transition-medium);
 }
 
 .layout-footer p {
@@ -248,8 +251,8 @@
     left: 0;
     right: 0;
     flex-direction: column;
-    background: white;
-    box-shadow: 0 8px 24px rgba(225, 29, 72, 0.15);
+    background: var(--bg-card);
+    box-shadow: var(--shadow-md);
     display: none;
     padding: 0;
     border-radius: 0 0 16px 16px;
@@ -267,14 +270,14 @@
   }
 
   .nav-tab {
-    border-bottom: 1px solid #fce7f3;
+    border-bottom: 1px solid var(--border-light);
     text-align: left;
     padding: 16px 24px;
   }
 
   .nav-tab.active {
-    border-bottom: 1px solid #fce7f3;
-    background: #fef7f8;
+    border-bottom: 1px solid var(--border-light);
+    background: var(--bg-light);
   }
 
   .nav-tab.active::after {
