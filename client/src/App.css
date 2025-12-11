@@ -1,51 +1,58 @@
 /**
- * Global App Styles - Rose Mart Attendance System
+ * Global App Styles - Attendance System (Dark Cyan Theme)
  */
 
-/* CSS Variables for consistent theming - Light Mode */
+/* CSS Variables for consistent theming - Dark Cyan Theme */
 :root {
-  --primary-rose: #e11d48;
-  --primary-rose-dark: #be123c;
-  --primary-rose-light: #fda4af;
-  --secondary-purple: #7c3aed;
-  --gradient-rose: linear-gradient(135deg, #e11d48 0%, #be123c 50%, #9f1239 100%);
-  --gradient-header: linear-gradient(135deg, #e11d48 0%, #9f1239 100%);
+  --primary-cyan: #0891b2;
+  --primary-cyan-dark: #0e7490;
+  --primary-cyan-light: #67e8f9;
+  --primary-cyan-darker: #155e75;
+  --secondary-teal: #14b8a6;
+  --gradient-cyan: linear-gradient(135deg, #0891b2 0%, #0e7490 50%, #155e75 100%);
+  --gradient-header: linear-gradient(135deg, #164e63 0%, #0c4a6e 50%, #0f172a 100%);
   --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
   --gradient-danger: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  --text-primary: #1f2937;
-  --text-secondary: #6b7280;
-  --bg-light: #fef7f8;
-  --bg-card: #ffffff;
-  --bg-input: #f9fafb;
-  --border-light: #fce7f3;
-  --border-color: #e5e7eb;
-  --shadow-sm: 0 2px 8px rgba(225, 29, 72, 0.08);
-  --shadow-md: 0 8px 24px rgba(225, 29, 72, 0.12);
-  --shadow-lg: 0 20px 50px rgba(225, 29, 72, 0.18);
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --bg-dark: #0f172a;
+  --bg-light: #1e293b;
+  --bg-card: #1e293b;
+  --bg-input: #334155;
+  --border-light: #334155;
+  --border-color: #475569;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(8, 145, 178, 0.1);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4), 0 4px 8px rgba(8, 145, 178, 0.15);
+  --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.5), 0 8px 16px rgba(8, 145, 178, 0.2);
+  --shadow-3d: 0 4px 0 #0e7490, 0 6px 12px rgba(0, 0, 0, 0.4);
+  --shadow-3d-hover: 0 6px 0 #0e7490, 0 10px 20px rgba(0, 0, 0, 0.5);
+  --shadow-3d-active: 0 2px 0 #0e7490, 0 3px 6px rgba(0, 0, 0, 0.3);
   --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-medium: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-bounce: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  --scrollbar-track: #fce7f3;
-  --scrollbar-thumb: linear-gradient(180deg, #e11d48 0%, #be123c 100%);
-  --footer-bg: linear-gradient(135deg, #1f2937 0%, #111827 100%);
-  --footer-text: #9ca3af;
+  --scrollbar-track: #1e293b;
+  --scrollbar-thumb: linear-gradient(180deg, #0891b2 0%, #0e7490 100%);
+  --footer-bg: linear-gradient(135deg, #0f172a 0%, #020617 100%);
+  --footer-text: #64748b;
+  --glow-cyan: 0 0 20px rgba(8, 145, 178, 0.4);
 }
 
-/* Dark Mode Variables */
-[data-theme="dark"] {
-  --text-primary: #f3f4f6;
-  --text-secondary: #9ca3af;
-  --bg-light: #111827;
-  --bg-card: #1f2937;
-  --bg-input: #374151;
-  --border-light: #374151;
-  --border-color: #4b5563;
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.5);
-  --scrollbar-track: #374151;
-  --footer-bg: linear-gradient(135deg, #0f172a 0%, #020617 100%);
-  --footer-text: #6b7280;
+/* Light Mode Override (optional - keeping dark as default) */
+[data-theme="light"] {
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --bg-dark: #f0fdfa;
+  --bg-light: #ecfeff;
+  --bg-card: #ffffff;
+  --bg-input: #f1f5f9;
+  --border-light: #a5f3fc;
+  --border-color: #67e8f9;
+  --shadow-sm: 0 2px 8px rgba(8, 145, 178, 0.1);
+  --shadow-md: 0 8px 24px rgba(8, 145, 178, 0.15);
+  --shadow-lg: 0 20px 50px rgba(8, 145, 178, 0.2);
+  --scrollbar-track: #cffafe;
+  --footer-bg: linear-gradient(135deg, #164e63 0%, #0c4a6e 100%);
+  --footer-text: #e2e8f0;
 }
 
 /* Reset and base styles */
@@ -66,7 +73,7 @@ body {
     Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--bg-light);
+  background-color: var(--bg-dark);
   color: var(--text-primary);
   line-height: 1.6;
   transition: background-color var(--transition-medium), color var(--transition-medium);
@@ -81,21 +88,21 @@ ul, ol {
 
 /* Links */
 a {
-  color: var(--primary-rose);
+  color: var(--primary-cyan);
   text-decoration: none;
   transition: color var(--transition-fast);
 }
 
 a:hover {
-  color: var(--primary-rose-dark);
+  color: var(--primary-cyan-light);
   text-decoration: none;
 }
 
 /* Theme Toggle Button */
 .theme-toggle {
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  color: white;
+  background: rgba(8, 145, 178, 0.2);
+  border: 1px solid rgba(103, 232, 249, 0.3);
+  color: var(--primary-cyan-light);
   padding: 10px 14px;
   border-radius: 12px;
   cursor: pointer;
@@ -105,11 +112,18 @@ a:hover {
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: var(--shadow-3d);
 }
 
 .theme-toggle:hover {
-  background: rgba(255, 255, 255, 0.25);
-  transform: scale(1.05);
+  background: rgba(8, 145, 178, 0.4);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-3d-hover);
+}
+
+.theme-toggle:active {
+  transform: translateY(2px);
+  box-shadow: var(--shadow-3d-active);
 }
 
 .theme-toggle .theme-icon {
@@ -120,14 +134,14 @@ a:hover {
   transform: rotate(20deg);
 }
 
-/* Loading screen with rose theme */
+/* Loading screen with cyan theme */
 .loading-screen {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: var(--gradient-rose);
+  background: var(--gradient-header);
   color: white;
   position: relative;
   overflow: hidden;
@@ -199,12 +213,12 @@ a:hover {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #be123c 0%, #9f1239 100%);
+  background: linear-gradient(180deg, #0891b2 0%, #155e75 100%);
 }
 
 /* Focus styles for accessibility */
 :focus-visible {
-  outline: 3px solid var(--primary-rose-light);
+  outline: 3px solid var(--primary-cyan-light);
   outline-offset: 2px;
 }
 
@@ -293,8 +307,8 @@ a:hover {
 }
 
 @keyframes glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(225, 29, 72, 0.3); }
-  50% { box-shadow: 0 0 40px rgba(225, 29, 72, 0.5); }
+  0%, 100% { box-shadow: 0 0 20px rgba(8, 145, 178, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(8, 145, 178, 0.5); }
 }
 
 /* Utility animation classes */
@@ -307,3 +321,26 @@ a:hover {
 .animate-bounce { animation: bounce 2s ease-in-out infinite; }
 .animate-float { animation: float 3s ease-in-out infinite; }
 .animate-glow { animation: glow 2s ease-in-out infinite; }
+
+/* 3D Button Base Styles */
+.btn-3d {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: all 0.2s ease;
+}
+
+.btn-3d:hover:not(:disabled) {
+  transform: translateY(-4px);
+}
+
+.btn-3d:active:not(:disabled) {
+  transform: translateY(2px);
+}
+
+/* Logo icon replacement styles */
+.logo-icon {
+  font-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -16,10 +16,17 @@ router.post('/signup', authController.signup);
 
 /**
  * POST /api/auth/login
- * Login user
+ * Login user (Admin with password)
  * Body: { identifier (mobile or employeeId), password }
  */
 router.post('/login', authController.login);
+
+/**
+ * POST /api/auth/login-employee
+ * Login employee with ID only (no password)
+ * Body: { employeeId }
+ */
+router.post('/login-employee', authController.loginEmployee);
 
 /**
  * GET /api/auth/me

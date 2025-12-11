@@ -113,6 +113,34 @@ export const AuthProvider = ({ children }) => {
   }, [navigate]);
 
   /**
+   * Login employee with ID only (no password)
+   * @param {string} employeeId - Employee ID
+   * @returns {Promise} Login result
+   */
+  const loginEmployee = useCallback(async (employeeId) => {
+    try {
+      const response = await authApi.loginEmployee({ employeeId });
+      
+      // Store auth data
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('user', JSON.stringify(response.user));
+      
+      setToken(response.token);
+      setUser(response.user);
+
+      // Redirect to employee dashboard
+      navigate('/employee');
+
+      return { success: true };
+    } catch (error) {
+      return { 
+        success: false, 
+        message: error.message || 'Login failed' 
+      };
+    }
+  }, [navigate]);
+
+  /**
    * Logout user
    */
   const logout = useCallback(() => {
@@ -147,6 +175,7 @@ export const AuthProvider = ({ children }) => {
     isAdmin,
     isEmployee,
     login,
+    loginEmployee,
     signup,
     logout
   };

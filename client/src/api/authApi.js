@@ -15,12 +15,22 @@ export const signup = async (data) => {
 };
 
 /**
- * Login user
+ * Login user (Admin with password)
  * @param {Object} data - { identifier, password }
  * @returns {Promise} Response with token and user data
  */
 export const login = async (data) => {
   const response = await axiosClient.post('/api/auth/login', data);
+  return response.data;
+};
+
+/**
+ * Login employee with ID only (no password)
+ * @param {Object} data - { employeeId }
+ * @returns {Promise} Response with token and user data
+ */
+export const loginEmployee = async (data) => {
+  const response = await axiosClient.post('/api/auth/login-employee', data);
   return response.data;
 };
 
@@ -36,5 +46,6 @@ export const getProfile = async () => {
 export default {
   signup,
   login,
+  loginEmployee,
   getProfile
 };
