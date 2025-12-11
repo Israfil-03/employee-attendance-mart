@@ -12,7 +12,9 @@ const EmployeeLayout = ({ children }) => {
     <div className="layout">
       <header className="layout-header">
         <div className="header-left">
-          <h1 className="header-title">Attendance System</h1>
+          <div className="header-logo">
+            <h1 className="header-title">Rose Mart</h1>
+          </div>
         </div>
         <div className="header-right">
           <span className="user-name">{user?.name}</span>
@@ -26,7 +28,7 @@ const EmployeeLayout = ({ children }) => {
         {children}
       </main>
       <footer className="layout-footer">
-        <p>&copy; {new Date().getFullYear()} Employee Attendance System</p>
+        <p>&copy; {new Date().getFullYear()} Rose Mart Attendance System</p>
       </footer>
     </div>
   );

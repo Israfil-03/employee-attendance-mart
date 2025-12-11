@@ -11,8 +11,8 @@ const AdminLayout = ({ children, activeTab, onTabChange }) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const tabs = [
-    { id: 'employees', label: 'Employees' },
-    { id: 'attendance', label: 'Attendance' }
+    { id: 'employees', label: '👥 Employees', icon: '👥' },
+    { id: 'attendance', label: '📋 Attendance', icon: '📋' }
   ];
 
   return (
@@ -25,7 +25,9 @@ const AdminLayout = ({ children, activeTab, onTabChange }) => {
           >
             ☰
           </button>
-          <h1 className="header-title">Admin Dashboard</h1>
+          <div className="header-logo">
+            <h1 className="header-title">Rose Mart Admin</h1>
+          </div>
         </div>
         <div className="header-right">
           <span className="user-name">{user?.name}</span>
@@ -56,7 +58,7 @@ const AdminLayout = ({ children, activeTab, onTabChange }) => {
       </main>
 
       <footer className="layout-footer">
-        <p>&copy; {new Date().getFullYear()} Employee Attendance System - Admin Panel</p>
+        <p>&copy; {new Date().getFullYear()} Rose Mart - Admin Panel</p>
       </footer>
     </div>
   );

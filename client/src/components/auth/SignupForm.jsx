@@ -78,8 +78,8 @@ const SignupForm = () => {
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-header">
-          <h1>Create Account</h1>
-          <p>Sign up to get started</p>
+          <h1>Join Rose Mart</h1>
+          <p>Create your attendance account</p>
         </div>
 
         {error && (
