@@ -19,15 +19,14 @@ const getApiUrl = () => {
     const hostname = window.location.hostname;
     
     // If on Render static site, convert to API URL
-    // employee-attendance-web.onrender.com -> employee-attendance-api.onrender.com
     if (hostname.includes('onrender.com')) {
-      // Handle the specific naming pattern
-      if (hostname.includes('employee-attendance-web')) {
-        return 'https://employee-attendance-api.onrender.com';
+      // Handle specific naming patterns for this app
+      if (hostname.includes('employee-attendance-mart-1')) {
+        return 'https://employee-attendance-mart.onrender.com';
       }
-      // Generic pattern: replace -web with -api
-      if (hostname.includes('-web')) {
-        return `https://${hostname.replace('-web', '-api')}`;
+      // Generic pattern: replace -1 suffix with base name (frontend-1 -> frontend for API)
+      if (hostname.match(/-\d+\.onrender\.com$/)) {
+        return `https://${hostname.replace(/-\d+(\.onrender\.com)$/, '$1')}`;
       }
     }
   }

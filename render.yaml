@@ -1,7 +1,7 @@
 services:
   # Backend API Service
   - type: web
-    name: employee-attendance-api
+    name: employee-attendance-mart
     env: node
     region: oregon
     branch: main
@@ -17,7 +17,7 @@ services:
       - key: JWT_SECRET
         generateValue: true
       - key: FRONTEND_URL
-        value: https://employee-attendance-web.onrender.com
+        value: https://employee-attendance-mart-1.onrender.com
       - key: NODE_ENV
         value: production
       - key: DEFAULT_ADMIN_NAME
@@ -31,7 +31,7 @@ services:
 
   # Frontend Static Site
   - type: web
-    name: employee-attendance-web
+    name: employee-attendance-mart-1
     env: static
     region: oregon
     branch: main
@@ -40,7 +40,7 @@ services:
     staticPublishPath: dist
     envVars:
       - key: VITE_API_URL
-        value: https://employee-attendance-api.onrender.com
+        value: https://employee-attendance-mart.onrender.com
     routes:
       - type: rewrite
         source: /*
