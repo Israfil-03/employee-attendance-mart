@@ -395,26 +395,138 @@
 }
 
 /* Mobile responsiveness */
-@media (max-width: 600px) {
-  .dashboard-greeting h2 {
-    font-size: 24px;
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 0 8px;
   }
-
+  
+  .dashboard-greeting {
+    margin-bottom: 24px;
+  }
+  
+  .dashboard-greeting h2 {
+    font-size: 26px;
+  }
+  
+  .dashboard-greeting p {
+    font-size: 15px;
+  }
+  
+  .message {
+    padding: 14px 18px;
+    font-size: 14px;
+    border-radius: 12px;
+  }
+  
   .status-card {
     padding: 28px 20px;
     border-radius: 20px;
+    margin-bottom: 24px;
+    box-shadow: 
+      0 6px 0 rgba(14, 116, 144, 0.3),
+      0 10px 30px rgba(0, 0, 0, 0.35),
+      inset 0 1px 0 rgba(103, 232, 249, 0.1);
+  }
+  
+  .status-card:hover {
+    transform: none;
+    box-shadow: 
+      0 6px 0 rgba(14, 116, 144, 0.3),
+      0 10px 30px rgba(0, 0, 0, 0.35),
+      inset 0 1px 0 rgba(103, 232, 249, 0.1);
+  }
+}
+
+@media (max-width: 600px) {
+  .dashboard-greeting h2 {
+    font-size: 22px;
+  }
+  
+  .dashboard-greeting p {
+    font-size: 14px;
+  }
+
+  .status-card {
+    padding: 24px 16px;
+    border-radius: 18px;
   }
 
   .action-buttons {
     flex-direction: column;
+    gap: 14px;
   }
 
   .action-btn {
     width: 100%;
-    padding: 16px 32px;
+    padding: 18px 24px;
+    font-size: 16px;
+    min-width: unset;
+    border-radius: 14px;
+  }
+  
+  .checkin-btn {
+    box-shadow: 
+      0 5px 0 #047857, 
+      0 8px 20px rgba(16, 185, 129, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+  
+  .checkout-btn {
+    box-shadow: 
+      0 5px 0 #155e75, 
+      0 8px 20px rgba(8, 145, 178, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+  
+  .status-indicator {
+    flex-direction: column;
+    gap: 10px;
   }
   
   .status-text {
     font-size: 18px;
+    text-align: center;
+  }
+  
+  .checkin-info,
+  .completed-info {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+  }
+  
+  .checkin-info p,
+  .completed-info p {
+    font-size: 14px;
+  }
+  
+  .location-note {
+    font-size: 13px;
+  }
+  
+  .dashboard-section h3 {
+    font-size: 18px;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 400px) {
+  .dashboard-greeting h2 {
+    font-size: 20px;
+  }
+  
+  .status-card {
+    padding: 20px 14px;
+  }
+  
+  .action-btn {
+    padding: 16px 20px;
+    font-size: 15px;
+  }
+  
+  .status-text {
+    font-size: 16px;
   }
 }

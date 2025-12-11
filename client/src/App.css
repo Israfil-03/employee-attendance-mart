@@ -65,6 +65,8 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  /* Prevent horizontal scroll on mobile */
+  overflow-x: hidden;
 }
 
 body {
@@ -77,6 +79,36 @@ body {
   color: var(--text-primary);
   line-height: 1.6;
   transition: background-color var(--transition-medium), color var(--transition-medium);
+  /* Prevent horizontal scroll on mobile */
+  overflow-x: hidden;
+  /* Improve touch scrolling */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Prevent text selection on buttons and interactive elements on mobile */
+button, .btn, .action-btn, .nav-tab, .toggle-btn {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+
+/* Ensure inputs don't zoom on iOS */
+@media screen and (max-width: 768px) {
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Safe area padding for notched devices */
+@supports (padding: max(0px)) {
+  .layout-header {
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+  }
+  
+  .layout-footer {
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+  }
 }
 
 /* Remove default list styles */
