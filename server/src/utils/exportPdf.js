@@ -3,6 +3,43 @@
  * Generates PDF files for attendance data using PDFKit
  */
 const PDFDocument = require('pdfkit');
+const { TIMEZONE } = require('../config/env');
+
+/**
+ * Format a date for display with proper timezone
+ * @param {Date|string} date 
+ * @returns {string} Formatted date string
+ */
+const formatDate = (date) => {
+  if (!date) return 'N/A';
+  return new Date(date).toLocaleDateString('en-IN', { timeZone: TIMEZONE });
+};
+
+/**
+ * Format a time for display with proper timezone
+ * @param {Date|string} date 
+ * @returns {string} Formatted time string
+ */
+const formatTime = (date) => {
+  if (!date) return 'N/A';
+  return new Date(date).toLocaleTimeString('en-IN', { 
+    timeZone: TIMEZONE,
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true
+  });
+};
+
+/**
+ * Format a datetime for display with proper timezone
+ * @param {Date|string} date 
+ * @returns {string} Formatted datetime string
+ */
+const formatDateTime = (date) => {
+  if (!date) return 'N/A';
+  return new Date(date).toLocaleString('en-IN', { timeZone: TIMEZONE });
+};
 
 /**
  * Generate a PDF document with attendance data
@@ -34,7 +71,7 @@ const generateAttendancePdf = async (records, filters = {}) => {
       doc.moveDown(0.5);
       
       // Filter info
-      let filterText = 'Generated: ' + new Date().toLocaleString();
+      let filterText = 'Generated: ' + formatDateTime(new Date());
       if (filters.from || filters.to) {
         filterText += ` | Date Range: ${filters.from || 'Start'} to ${filters.to || 'Now'}`;
       }
@@ -104,11 +141,11 @@ const generateAttendancePdf = async (records, filters = {}) => {
           String(index + 1),
           record.employee_id || 'N/A',
           record.user_name || 'Unknown',
-          new Date(record.check_in_time).toLocaleDateString(),
-          new Date(record.check_in_time).toLocaleTimeString(),
+          formatDate(record.check_in_time),
+          formatTime(record.check_in_time),
           checkInLoc,
           record.check_out_time 
-            ? new Date(record.check_out_time).toLocaleTimeString() 
+            ? formatTime(record.check_out_time) 
             : 'Not out',
           checkOutLoc
         ];

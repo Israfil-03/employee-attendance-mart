@@ -21,6 +21,9 @@ module.exports = {
   // Frontend URL for CORS configuration
   FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:5173',
 
+  // Timezone for date/time formatting (set to your local timezone)
+  TIMEZONE: process.env.TIMEZONE || 'Asia/Kolkata',
+
   // Default admin bootstrap values (used to seed the first admin account)
   DEFAULT_ADMIN_NAME: process.env.DEFAULT_ADMIN_NAME || 'Admin',
   DEFAULT_ADMIN_MOBILE: process.env.DEFAULT_ADMIN_MOBILE || '9999999999',
